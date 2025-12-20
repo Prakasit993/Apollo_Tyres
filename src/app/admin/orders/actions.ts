@@ -15,7 +15,7 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
 
     try {
         const { error } = await supabase
-            .from('orders')
+            .from('tyres_orders')
             .update({ status: newStatus })
             .eq('id', orderId)
 
@@ -39,16 +39,16 @@ export async function getAdminOrders() {
     // Assuming middleware/layout protects the page, but double check is good.
 
     const { data: orders, error } = await supabase
-        .from('orders')
+        .from('tyres_orders')
         .select(`
             *,
             profiles:user_id (full_name, email, phone),
-            order_items (
+            tyres_order_items (
                 id,
                 quantity,
                 unit_price,
                 total_price,
-                products (brand, model)
+                tyres_products (brand, model)
             )
         `)
         .order('created_at', { ascending: false })
@@ -77,7 +77,7 @@ export async function deleteOrder(orderId: string) {
         // If not, we'd delete items here. Let's assume standard cascade or just delete order.
 
         const { error } = await supabase
-            .from('orders')
+            .from('tyres_orders')
             .delete()
             .eq('id', orderId)
 

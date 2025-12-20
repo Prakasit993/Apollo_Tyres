@@ -29,6 +29,12 @@ export async function Header() {
                     <Link href="/products" className="transition-colors hover:text-gold-500 text-foreground/80 hover:text-foreground">
                         SHOP TIRES
                     </Link>
+                    <Link href="/warranty" className="transition-colors hover:text-gold-500 text-foreground/80 hover:text-foreground">
+                        WARRANTY
+                    </Link>
+                    <Link href="/contact" className="transition-colors hover:text-gold-500 text-foreground/80 hover:text-foreground">
+                        CONTACT
+                    </Link>
                 </nav>
 
                 {/* Right Actions */}
@@ -55,7 +61,7 @@ export async function Header() {
                         </Link>
                     )}
 
-                    <CartButton />
+                    {user && <CartButton />}
 
                     <Button variant="ghost" size="icon" className="md:hidden">
                         <Menu className="h-5 w-5" />

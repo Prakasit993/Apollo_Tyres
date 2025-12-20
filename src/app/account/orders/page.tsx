@@ -17,12 +17,12 @@ export default async function UserOrdersPage() {
 
     // Fetch user's orders with items
     const { data: orders, error } = await supabase
-        .from('orders')
+        .from('tyres_orders')
         .select(`
             *,
-            order_items (
+            tyres_order_items (
                 *,
-                products (
+                tyres_products (
                     brand,
                     model,
                     image_url
@@ -102,13 +102,13 @@ export default async function UserOrdersPage() {
                             {/* Order Items */}
                             <div className="p-6">
                                 <ul className="divide-y divide-gray-100">
-                                    {order.order_items.map((item: any) => (
+                                    {order.tyres_order_items.map((item: any) => (
                                         <li key={item.id} className="py-4 first:pt-0 last:pb-0 flex items-start gap-4">
                                             <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center shrink-0 overflow-hidden border border-gray-200">
-                                                {item.products?.image_url ? (
+                                                {item.tyres_products?.image_url ? (
                                                     <img
-                                                        src={item.products.image_url}
-                                                        alt={item.products.model}
+                                                        src={item.tyres_products.image_url}
+                                                        alt={item.tyres_products.model}
                                                         className="w-full h-full object-cover"
                                                     />
                                                 ) : (
@@ -116,7 +116,7 @@ export default async function UserOrdersPage() {
                                                 )}
                                             </div>
                                             <div className="flex-1">
-                                                <h4 className="font-bold text-charcoal-900">{item.products?.brand} {item.products?.model}</h4>
+                                                <h4 className="font-bold text-charcoal-900">{item.tyres_products?.brand} {item.tyres_products?.model}</h4>
                                                 <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                                             </div>
                                             <div className="text-right">

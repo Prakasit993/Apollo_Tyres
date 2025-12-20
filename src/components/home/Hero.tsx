@@ -53,12 +53,16 @@ export function Hero() {
 
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                        <Button size="lg" className="bg-charcoal-900 text-gold-500 hover:bg-black font-bold border-2 border-gold-500 rounded-none text-base px-10 h-14 uppercase tracking-wider shadow-xl">
-                            SHOP TIRES
-                        </Button>
-                        <Button size="lg" variant="default" className="bg-white text-charcoal-900 hover:bg-gray-100 font-bold border-none rounded-none text-base px-10 h-14 uppercase tracking-wider shadow-xl">
-                            VIEW LOCATION
-                        </Button>
+                        <Link href="/products">
+                            <Button size="lg" className="w-full sm:w-auto bg-charcoal-900 text-gold-500 hover:bg-black font-bold border-2 border-gold-500 rounded-none text-base px-10 h-14 uppercase tracking-wider shadow-xl">
+                                SHOP TIRES
+                            </Button>
+                        </Link>
+                        <Link href="https://maps.app.goo.gl/u8xZxi6XjyWpgm54A" target="_blank" rel="noopener noreferrer">
+                            <Button size="lg" variant="default" className="w-full sm:w-auto bg-white text-charcoal-900 hover:bg-gray-100 font-bold border-none rounded-none text-base px-10 h-14 uppercase tracking-wider shadow-xl">
+                                VIEW LOCATION
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>

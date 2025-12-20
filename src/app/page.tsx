@@ -2,8 +2,18 @@ import { Hero } from "@/components/home/Hero"
 import { FilterSidebar } from "@/components/shop/FilterSidebar"
 import { MapWidget } from "@/components/home/MapWidget"
 import { Reviews } from "@/components/home/Reviews"
+import { createClient } from "@/lib/supabase-server"
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: reviews } = await supabase
+    .from('tyres_reviews')
+    .select('*')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
+
   return (
     <div className="bg-cream-50 min-h-screen pb-20 overflow-x-hidden">
       {/* Hero Section */}
@@ -48,7 +58,7 @@ export default function Home() {
             <FilterSidebar />
           </div>
 
-          <Reviews />
+          <Reviews reviews={reviews || []} />
         </div>
       </div>
 

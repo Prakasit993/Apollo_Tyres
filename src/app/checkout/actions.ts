@@ -145,7 +145,7 @@ export async function placeOrder(
 
         // 4. Create Order
         const { data: order, error: orderError } = await supabase
-            .from('orders')
+            .from('tyres_orders')
             .insert({
                 user_id: user.id,
                 total_price: cartTotal,
@@ -160,7 +160,7 @@ export async function placeOrder(
 
         if (orderError) {
             console.error('Order Error:', orderError)
-            throw new Error('Failed to create order')
+            throw new Error(`Failed to create order: ${orderError.message}`)
         }
 
         // 5. Create Order Items
@@ -173,7 +173,7 @@ export async function placeOrder(
         }))
 
         const { error: itemsError } = await supabase
-            .from('order_items')
+            .from('tyres_order_items')
             .insert(orderItems)
 
         if (itemsError) {
@@ -232,8 +232,9 @@ export async function placeOrder(
             console.error("Notification setup error", e)
         }
 
-    } catch (error) {
-        return { message: 'Database Error: Failed to create order.' }
+    } catch (error: any) {
+        console.error("Full Order Error:", error)
+        return { message: `Database Error: ${error.message || JSON.stringify(error)}` }
     }
 
     // 7. Redirect on Success

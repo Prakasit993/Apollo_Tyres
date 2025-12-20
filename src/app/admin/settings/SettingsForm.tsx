@@ -16,11 +16,11 @@ interface SettingsFormProps {
 }
 
 export function SettingsForm({ initialRemarks, initialBankName, initialBankAccNum, initialBankAccName, initialQrCodeUrl }: SettingsFormProps) {
-    const [remarks, setRemarks] = useState(initialRemarks)
-    const [bankName, setBankName] = useState(initialBankName)
-    const [bankAccNum, setBankAccNum] = useState(initialBankAccNum)
-    const [bankAccName, setBankAccName] = useState(initialBankAccName)
-    const [qrCodeUrl, setQrCodeUrl] = useState(initialQrCodeUrl)
+    const [remarks, setRemarks] = useState(initialRemarks || "")
+    const [bankName, setBankName] = useState(initialBankName || "")
+    const [bankAccNum, setBankAccNum] = useState(initialBankAccNum || "")
+    const [bankAccName, setBankAccName] = useState(initialBankAccName || "")
+    const [qrCodeUrl, setQrCodeUrl] = useState(initialQrCodeUrl || "")
 
     // Simple file upload state
     const [uploading, setUploading] = useState(false)
@@ -29,17 +29,20 @@ export function SettingsForm({ initialRemarks, initialBankName, initialBankAccNu
 
     const handleSave = () => {
         startTransition(async () => {
-            // Update all settings
-            const r1 = await updateSettings('checkout_remarks', remarks)
-            const r2 = await updateSettings('bank_name', bankName)
-            const r3 = await updateSettings('bank_account_number', bankAccNum)
-            const r4 = await updateSettings('bank_account_name', bankAccName)
-            const r5 = await updateSettings('qr_code_url', qrCodeUrl)
+            const results = await Promise.all([
+                updateSettings('checkout_remarks', remarks),
+                updateSettings('bank_name', bankName),
+                updateSettings('bank_account_number', bankAccNum),
+                updateSettings('bank_account_name', bankAccName),
+                updateSettings('qr_code_url', qrCodeUrl)
+            ])
 
-            if (r1.success && r2.success && r3.success && r4.success && r5.success) {
+            const errors = results.filter(r => !r.success).map(r => r.message)
+
+            if (errors.length === 0) {
                 alert("All settings saved!")
             } else {
-                alert("Some settings failed to save.")
+                alert(`Failed to save some settings:\n${errors.join('\n')}`)
             }
         })
     }

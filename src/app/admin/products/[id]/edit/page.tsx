@@ -8,7 +8,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
     // 1. Fetch Product
     const { data: product, error } = await supabase
-        .from('products')
+        .from('tyres_products')
         .select('*')
         .eq('id', id)
         .single()

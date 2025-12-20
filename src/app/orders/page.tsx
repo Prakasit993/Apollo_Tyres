@@ -18,12 +18,12 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     }
 
     let query = supabase
-        .from("orders")
+        .from("tyres_orders")
         .select(`
             *,
-            order_items (
+            tyres_order_items (
                 *,
-                product:products(brand, model, image_url)
+                product:tyres_products(brand, model, image_url)
             )
         `)
         .eq("user_id", user.id)
@@ -43,14 +43,24 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
             const oneHour = 60 * 60 * 1000
 
             if (now - createdAt > oneHour) {
-                // Expired, update status to cancelled
-                const { error } = await supabase
-                    .from('orders')
-                    .update({ status: 'cancelled' })
-                    .eq('id', order.id)
+                // Expired, update status to cancelled using Admin Client (System Action)
+                try {
+                    // Dynamically import to avoid build issues if env is missing during static gen
+                    const { createAdminClient } = await import('@/lib/supabase-admin')
+                    const supabaseAdmin = createAdminClient()
 
-                if (!error) {
-                    return { ...order, status: 'cancelled' }
+                    const { error } = await supabaseAdmin
+                        .from('tyres_orders')
+                        .update({ status: 'cancelled' })
+                        .eq('id', order.id)
+
+                    if (!error) {
+                        return { ...order, status: 'cancelled' }
+                    } else {
+                        console.error("Auto-cancel failed:", error)
+                    }
+                } catch (err) {
+                    console.error("Admin client init failed for auto-cancel:", err)
                 }
             }
         }
@@ -86,10 +96,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                     {orders.map((order) => (
                         <div key={order.id} className="bg-white border border-border/60 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                             <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 flex flex-wrap gap-4 justify-between items-center">
-                                <div>
-                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-bold">Order ID</p>
-                                    <p className="font-mono text-sm">{order.id.slice(0, 8)}...</p>
-                                </div>
+
                                 <div>
                                     <p className="text-sm text-gray-500 uppercase tracking-wider font-bold">Date</p>
                                     <p className="font-medium">{new Date(order.created_at).toLocaleDateString()}</p>
@@ -116,7 +123,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
 
                             <div className="p-6">
                                 <div className="space-y-4">
-                                    {order.order_items.map((item: any) => (
+                                    {order.tyres_order_items.map((item: any) => (
                                         <div key={item.id} className="flex items-center gap-4">
                                             <div className="w-16 h-16 bg-gray-100 rounded-md shrink-0 overflow-hidden">
                                                 {item.product?.image_url && (

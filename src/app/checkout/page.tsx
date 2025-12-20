@@ -51,7 +51,11 @@ export default async function CheckoutPage() {
                 profile={profile}
                 defaultAddress={fullAddress}
                 remarks={remarks}
-                bankDetails={bankDetails}
+                bankDetails={{
+                    bankName,
+                    accountNumber: bankAccNum,
+                    accountName: bankAccName
+                }}
                 qrCodeUrl={qrCodeUrl}
             />
         </div>

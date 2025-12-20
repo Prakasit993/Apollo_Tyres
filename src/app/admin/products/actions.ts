@@ -16,21 +16,22 @@ export async function deleteProduct(productId: string) {
 
     try {
         const { error } = await supabase
-            .from('products')
+            .from('tyres_products')
             .delete()
             .eq('id', productId)
 
         if (error) {
             console.error("Delete Error:", error)
-            return { message: "Failed to delete product" }
+            return { message: `Failed to delete product: ${error.message}` }
         }
 
         revalidatePath('/admin/products')
         revalidatePath('/products') // Update storefront too
         return { success: true, message: "Product deleted successfully" }
 
-    } catch (e) {
-        return { message: "Server error" }
+    } catch (e: any) {
+        console.error("Delete Error:", e)
+        return { message: `Failed to delete product: ${e.message || JSON.stringify(e)}` }
     }
 }
 
@@ -69,11 +70,11 @@ export async function upsertProduct(prevState: any, formData: FormData) {
     let error
     if (id) {
         // Update
-        const res = await supabase.from('products').update(productData).eq('id', id)
+        const res = await supabase.from('tyres_products').update(productData).eq('id', id)
         error = res.error
     } else {
         // Insert
-        const res = await supabase.from('products').insert(productData)
+        const res = await supabase.from('tyres_products').insert(productData)
         error = res.error
     }
 

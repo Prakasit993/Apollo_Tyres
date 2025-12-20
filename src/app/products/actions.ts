@@ -38,7 +38,7 @@ export async function filterProducts(prevState: any, formData: FormData) {
 export async function getProducts(searchParams: { [key: string]: string | string[] | undefined }) {
   const supabase = await createClient();
 
-  let query = supabase.from("products").select("*");
+  let query = supabase.from("tyres_products").select("*");
 
   const q = searchParams.q as string;
   const brand = searchParams.brand as string;

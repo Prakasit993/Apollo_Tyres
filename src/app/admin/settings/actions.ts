@@ -5,9 +5,11 @@ import { revalidatePath } from "next/cache"
 
 export async function getSettings(key: string) {
     const supabase = await createClient()
-    const { data } = await supabase.from('site_settings').select('value').eq('key', key).single()
+    const { data } = await supabase.from('tyres_site_settings').select('value').eq('key', key).single()
     return data?.value || ''
 }
+
+import { createAdminClient } from "@/lib/supabase-admin"
 
 export async function updateSettings(key: string, value: string) {
     const supabase = await createClient()
@@ -20,9 +22,11 @@ export async function updateSettings(key: string, value: string) {
     if (profile?.role !== 'admin') return { message: "Forbidden" }
 
     try {
+        const supabaseAdmin = createAdminClient()
+
         // Use upsert to handle cases where the setting key doesn't exist yet
-        const { error } = await supabase
-            .from('site_settings')
+        const { error } = await supabaseAdmin
+            .from('tyres_site_settings')
             .upsert({
                 key,
                 value,
@@ -36,8 +40,8 @@ export async function updateSettings(key: string, value: string) {
         revalidatePath('/checkout') // Update checkout page too
         return { success: true, message: "Settings updated successfully" }
 
-    } catch (e) {
+    } catch (e: any) {
         console.error("Update Settings Error:", e)
-        return { message: "Failed to update settings" }
+        return { message: e.message || "Failed to update settings" }
     }
 }
