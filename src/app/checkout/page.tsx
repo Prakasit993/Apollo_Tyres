@@ -1,9 +1,20 @@
 import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
 import { CheckoutForm } from "./CheckoutForm"
+import { getSettings } from "../admin/settings/actions"
 
 export default async function CheckoutPage() {
     const supabase = await createClient()
+    const remarks = await getSettings('checkout_remarks')
+
+    // Fetch individual bank settings
+    const bankName = await getSettings('bank_name')
+    const bankAccNum = await getSettings('bank_account_number')
+    const bankAccName = await getSettings('bank_account_name')
+    const qrCodeUrl = await getSettings('qr_code_url')
+
+    // Combine them for the UI
+    const bankDetails = `${bankName ? `Bank: ${bankName}` : ''}\n${bankAccNum ? `Acc: ${bankAccNum}` : ''}\n${bankAccName ? `Name: ${bankAccName}` : ''}`.trim()
 
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -39,6 +50,9 @@ export default async function CheckoutPage() {
                 user={user}
                 profile={profile}
                 defaultAddress={fullAddress}
+                remarks={remarks}
+                bankDetails={bankDetails}
+                qrCodeUrl={qrCodeUrl}
             />
         </div>
     )

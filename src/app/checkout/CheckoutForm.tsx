@@ -7,24 +7,27 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
-import { placeOrder } from "./actions"
+import { placeOrder, updateProfileAddress } from "./actions"
 import { Loader2 } from "lucide-react"
-import { updateProfileAddress } from "./actions"
+import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 interface CheckoutFormProps {
     user: any
     profile: any
     defaultAddress?: string
+    remarks: string
+    bankDetails: string
+    qrCodeUrl: string
 }
 
-import { useRouter } from "next/navigation"
-
-export function CheckoutForm({ user, profile, defaultAddress }: CheckoutFormProps) {
+export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetails, qrCodeUrl }: CheckoutFormProps) {
     const router = useRouter()
     const { items, getSubtotal, clearCart } = useCartStore()
     const [isLoading, setIsLoading] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [paymentMethod, setPaymentMethod] = useState("transfer")
 
     // Local state for form values
     const [formValues, setFormValues] = useState({
@@ -40,7 +43,6 @@ export function CheckoutForm({ user, profile, defaultAddress }: CheckoutFormProp
     // Calculate total
     const total = getSubtotal()
 
-    // Handle saving local changes via Server Action
     const handleSaveDetails = async () => {
         setIsLoading(true)
         const formData = new FormData()
@@ -73,6 +75,19 @@ export function CheckoutForm({ user, profile, defaultAddress }: CheckoutFormProp
         // Populate missing fields from state if hidden inputs missed them (safeguard)
         for (const [key, value] of Object.entries(formValues)) {
             if (!formData.get(key)) formData.set(key, value)
+        }
+
+        // Ensure payment method is set
+        formData.set('paymentMethod', paymentMethod)
+
+        // Validate Slip for Transfer
+        if (paymentMethod === 'transfer') {
+            const file = formData.get('slip') as File
+            if (!file || file.size === 0) {
+                setError("Please upload the payment slip.")
+                setIsLoading(false)
+                return
+            }
         }
 
         try {
@@ -247,22 +262,52 @@ export function CheckoutForm({ user, profile, defaultAddress }: CheckoutFormProp
                             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gold-500 text-black text-sm">2</span>
                             Payment Method
                         </h2>
-                        <RadioGroup defaultValue="transfer" name="paymentMethod" className="grid gap-4">
-                            <div>
+                        <RadioGroup
+                            value={paymentMethod}
+                            onValueChange={setPaymentMethod}
+                            name="paymentMethod"
+                            className="grid gap-4"
+                        >
+                            <div className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "transfer" ? "border-gold-500 bg-gold-50/10" : "border-muted")}>
                                 <RadioGroupItem value="transfer" id="transfer" className="peer sr-only" />
                                 <Label
                                     htmlFor="transfer"
-                                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                    className="flex flex-col items-center justify-between cursor-pointer"
                                 >
                                     <span className="font-bold">Bank Transfer</span>
                                     <span className="text-sm text-muted-foreground">PromptPay / Mobile Banking</span>
                                 </Label>
+
+                                {/* Bank Details Extension */}
+                                {paymentMethod === "transfer" && (
+                                    <div className="mt-4 pt-4 border-t border-dashed animate-in fade-in slide-in-from-top-2">
+                                        <div className="text-center mb-4">
+                                            {qrCodeUrl ? (
+                                                <div className="mx-auto w-48 h-48 bg-gray-100 rounded-lg mb-2 overflow-hidden border">
+                                                    <img src={qrCodeUrl} alt="Payment QR Code" className="w-full h-full object-contain" />
+                                                </div>
+                                            ) : (
+                                                <div className="mx-auto w-48 h-48 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-gray-400 text-xs text-center p-2">
+                                                    QR Code not set in Admin Settings
+                                                </div>
+                                            )}
+                                            <p className="text-sm text-gray-500 font-mono mt-2 whitespace-pre-wrap">{bankDetails || "Bank details not set"}</p>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="slip" className="text-sm font-bold text-red-600">Upload Payment Slip *</Label>
+                                            <Input id="slip" name="slip" type="file" accept="image/*" className="cursor-pointer" />
+                                            <p className="text-xs text-muted-foreground">Please upload the transfer slip to confirm your order.</p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                            <div>
+
+                            <div className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "cash" ? "border-gold-500 bg-gold-50/10" : "border-muted")}>
                                 <RadioGroupItem value="cash" id="cash" className="peer sr-only" />
                                 <Label
                                     htmlFor="cash"
-                                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                    className="flex flex-col items-center justify-between cursor-pointer"
                                 >
                                     <span className="font-bold">Cash on Delivery (COD)</span>
                                     <span className="text-sm text-muted-foreground">Pay when you receive items</span>
@@ -271,50 +316,15 @@ export function CheckoutForm({ user, profile, defaultAddress }: CheckoutFormProp
                         </RadioGroup>
                     </div>
 
-                    {/* Remarks / Important Notes */}
+                    {/* Remarks / Important Notes - Using HTML from Editor */}
                     <div className="bg-white p-6 rounded-lg border border-border/40 shadow-sm border-l-4 border-l-gold-500">
                         <h2 className="text-xl font-heading font-bold mb-4 flex items-center gap-2">
                             หมายเหตุ**
                         </h2>
-                        <ul className="space-y-3 text-sm text-gray-700 list-disc pl-4 marker:text-gold-500">
-                            <li>
-                                <div>
-                                    <span className="font-bold">มารับของได้ที่:</span> กทม รามอินทรา โซนสวนสยาม ครับ
-                                </div>
-                                <div className="mt-2">
-                                    <a
-                                        href="https://maps.app.goo.gl/u8xZxi6XjyWpgm54A"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1.5 bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-red-700 shadow-md transition-all no-underline"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
-                                        เปิดดูแผนที่ร้าน
-                                    </a>
-                                </div>
-                            </li>
-                            <li>
-                                <span className="font-bold text-red-600">ราคานี้สำหรับ เงินสด และ เงินโอน เท่านั้น!!</span>
-                            </li>
-                            <li>
-                                <span className="font-bold text-green-600">แถมฟรี!!</span> จุ๊บลมยาง คุณภาพดีที่สุด
-                            </li>
-                            <li>
-                                <span className="font-bold">ราคาแต่ยางไม่รวมติดตั้ง</span><br />
-                                <span className="text-gray-500 text-xs">(มีร้านติดตั้ง ใส่ ถ่วง ใกล้ๆ ผม ห่างกันแค่ 700 เมตร แนะนำให้ครับ)</span>
-                            </li>
-                            <li>
-                                <span className="font-bold">ค่าติดตั้ง เริ่มต้น 4 เส้น 500.-</span><br />
-                                <span className="text-gray-500 text-xs">(ใส่ ถอด ถ่วง 4 ล้อ ครับ)</span>
-                            </li>
-                            <li>
-                                <span className="font-bold">ราคาไม่รวมจัดส่ง</span> (มีบริการจัดส่งได้ทั่วไทย)<br />
-                                <ul className="list-none pl-2 mt-1 space-y-1 text-xs text-gray-600">
-                                    <li>- <span className="font-semibold">กทม : ปริมณฑล</span> ส่งโดย Taxi กด มิสเตอร์ตามจริงครับ</li>
-                                    <li>- <span className="font-semibold">ต่างจังหวัด</span> : ค่าขนส่งขึ้นอยู่กับแต่ละจังหวัดและขนาดยาง</li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <div
+                            dangerouslySetInnerHTML={{ __html: remarks }}
+                            className="prose prose-sm prose-gray max-w-none prose-headings:font-bold prose-headings:text-inherit prose-a:text-blue-600 hover:prose-a:underline"
+                        />
                     </div>
                 </div>
 

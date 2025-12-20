@@ -36,7 +36,7 @@ export function ProductCard({ variants }: ProductCardProps) {
             id: selectedProduct.id,
             model: selectedProduct.model,
             price: selectedProduct.price,
-            imageUrl: (selectedProduct as any).imageUrl || '',
+            imageUrl: (selectedProduct as any).image_url || '',
             brand: selectedProduct.brand,
             specs: `${selectedProduct.width}/${selectedProduct.aspect_ratio} R${selectedProduct.rim}`
         });
@@ -49,11 +49,13 @@ export function ProductCard({ variants }: ProductCardProps) {
     const hasMultipleVariants = variants.length > 1;
 
     return (
-        <div className="group relative bg-white border border-border/50 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full rounded-sm overflow-hidden">
+        <div className="group relative bg-white border border-border/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full rounded-sm overflow-hidden">
 
             {/* Top Brand Logo Area (Mock) */}
             <div className="absolute top-4 left-4 z-10">
-                <span className="font-extrabold text-charcoal-900/40 text-lg uppercase tracking-widest">{selectedProduct.brand}</span>
+                <span className="font-extrabold text-charcoal-900/40 text-lg uppercase tracking-widest transition-opacity duration-300 opacity-50 group-hover:opacity-100">
+                    {selectedProduct.brand}
+                </span>
             </div>
 
             {/* Image Section - Gold Background Style */}
@@ -61,12 +63,12 @@ export function ProductCard({ variants }: ProductCardProps) {
                 {/* Brand Logo Watermark effect could go here */}
 
                 {/* Product Image */}
-                <div className="relative w-full h-full transform transition-transform duration-500 group-hover:scale-110 flex items-center justify-center text-charcoal-900/10">
-                    {(selectedProduct as any).imageUrl ? (
+                <div className="relative w-full h-full transform transition-transform duration-700 ease-out group-hover:scale-125 group-hover:-rotate-3 flex items-center justify-center text-charcoal-900/10">
+                    {(selectedProduct as any).image_url ? (
                         <img
-                            src={(selectedProduct as any).imageUrl}
+                            src={(selectedProduct as any).image_url}
                             alt={`${selectedProduct.brand} ${selectedProduct.model}`}
-                            className="object-contain w-full h-full drop-shadow-2xl"
+                            className="object-contain w-full h-full drop-shadow-md group-hover:drop-shadow-2xl transition-all duration-500"
                             loading="lazy"
                         />
                     ) : (

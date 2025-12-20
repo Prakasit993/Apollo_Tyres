@@ -100,6 +100,33 @@ export async function placeOrder(
 
     const { address, phone, fullName, district, amphoe, province, zipcode, deliveryMethod, paymentMethod } = validatedFields.data
 
+    let slipUrl = null
+    if (paymentMethod === 'transfer') {
+        const slipFile = formData.get('slip') as File
+        if (slipFile && slipFile.size > 0) {
+            // Upload Slip
+            const fileExt = slipFile.name.split('.').pop()
+            const fileName = `${user.id}/${Date.now()}.${fileExt}`
+            const bucketName = 'slips'
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from(bucketName)
+                .upload(fileName, slipFile)
+
+            if (uploadError) {
+                console.error("Slip upload error:", uploadError)
+                return { message: "Failed to upload payment slip. Please try again." }
+            }
+
+            // Get Public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from(bucketName)
+                .getPublicUrl(fileName)
+
+            slipUrl = publicUrl
+        }
+    }
+
     try {
         // 3. Update Profile (Save latest address including granular fields)
         await supabase
@@ -125,7 +152,8 @@ export async function placeOrder(
                 status: 'pending',
                 delivery_method: deliveryMethod,
                 payment_method: paymentMethod,
-                shipping_address: address
+                shipping_address: address,
+                slip_url: slipUrl
             })
             .select()
             .single()

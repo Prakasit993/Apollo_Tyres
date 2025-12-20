@@ -53,6 +53,7 @@ export async function upsertProduct(prevState: any, formData: FormData) {
     const aspectRatio = parseInt(formData.get('aspectRatio') as string)
     const rim = parseInt(formData.get('rim') as string)
     const imageUrl = formData.get('imageUrl') as string // Client uploads and sends URL
+    console.log("Upsert Product Debug:", { id, brand, imageUrl })
 
     const productData = {
         brand,
