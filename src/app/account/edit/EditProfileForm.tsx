@@ -60,7 +60,16 @@ export function EditProfileForm({ profile, user }: { profile: any, user: any }) 
             )}
 
             <div className="flex gap-3 pt-4 border-t border-gray-100">
-                <Button type="button" variant="outline" className="w-full" onClick={() => router.back()}>
+                <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                        if (confirm("ถ้าคุณยกเลิก คุณจะไม่สามารถทำการสั่งซื้อได้จนกว่าจะกรอกข้อมูลครบถ้วน\nต้องการกลับไปหน้าหลักหรือไม่?")) {
+                            router.push('/')
+                        }
+                    }}
+                >
                     Cancel
                 </Button>
                 <Button type="submit" disabled={isPending} className="w-full bg-gold-500 text-charcoal-900 hover:bg-gold-600 font-bold">

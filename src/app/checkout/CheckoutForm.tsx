@@ -484,8 +484,8 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
 
                             <Button
                                 type="submit"
-                                className="w-full bg-gold-500 hover:bg-gold-600 text-black font-bold h-12 text-lg"
-                                disabled={isLoading}
+                                className="w-full bg-gold-500 hover:bg-gold-600 text-black font-bold h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={isLoading || !formValues.address || !formValues.phone || !formValues.fullName}
                             >
                                 {isLoading ? (
                                     <>
@@ -496,6 +496,11 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                     "CONFIRM ORDER"
                                 )}
                             </Button>
+                            {(!formValues.address || !formValues.phone || !formValues.fullName) && (
+                                <p className="text-sm text-red-500 text-center mt-2 font-medium">
+                                    Please complete your shipping details above to proceed.
+                                </p>
+                            )}
                             <p className="text-xs text-center text-muted-foreground mt-4">
                                 By placing an order, you agree to our Terms of Service.
                             </p>
