@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select"
 
 export function OrderTable({ initialOrders }: { initialOrders: any[] }) {
-    const [orders, setOrders] = useState(initialOrders)
+    const [orders, setOrders] = useState(initialOrders || [])
     const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null)
 
     const toggleExpand = (id: string) => {

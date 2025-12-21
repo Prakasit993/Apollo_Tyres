@@ -62,14 +62,14 @@ export function ProductCard({ variants }: ProductCardProps) {
             </div>
 
             {/* Image Section - Gold Background Style */}
-            <div className={cn("aspect-square relative p-8 flex items-center justify-center overflow-hidden transition-colors", "bg-[#E8C872]")}>
+            <Link href={`/products/${(selectedProduct as any).slug || selectedProduct.id}`} className="block relative aspect-square p-8 flex items-center justify-center overflow-hidden transition-colors bg-[#E8C872] cursor-pointer">
                 {/* Brand Logo Watermark effect could go here */}
 
                 {/* Product Image */}
                 <div className="relative w-full h-full transform transition-transform duration-700 ease-out group-hover:scale-125 group-hover:-rotate-3 flex items-center justify-center text-charcoal-900/10">
-                    {(selectedProduct as any).image_url ? (
+                    {((selectedProduct as any).image_url || (selectedProduct as any).gallery?.[0]) ? (
                         <img
-                            src={(selectedProduct as any).image_url}
+                            src={(selectedProduct as any).image_url || (selectedProduct as any).gallery?.[0]}
                             alt={`${selectedProduct.brand} ${selectedProduct.model}`}
                             className="object-contain w-full h-full drop-shadow-md group-hover:drop-shadow-2xl transition-all duration-500"
                             loading="lazy"
@@ -87,16 +87,18 @@ export function ProductCard({ variants }: ProductCardProps) {
                         HOT
                     </div>
                 )}
-            </div>
+            </Link>
 
             {/* Content Section */}
             <div className="p-5 flex flex-col flex-1 gap-2">
 
                 {/* Title */}
                 <div className="mb-2">
-                    <h3 className="font-black text-lg text-charcoal-900 uppercase leading-tight line-clamp-1">
-                        {selectedProduct.brand} {selectedProduct.model}
-                    </h3>
+                    <Link href={`/products/${(selectedProduct as any).slug || selectedProduct.id}`} className="hover:text-gold-600 transition-colors">
+                        <h3 className="font-black text-lg text-charcoal-900 uppercase leading-tight line-clamp-1">
+                            {selectedProduct.brand} {selectedProduct.model}
+                        </h3>
+                    </Link>
                     {!hasMultipleVariants && (
                         <p className="text-muted-foreground text-sm font-medium">
                             {selectedProduct.width}/{(selectedProduct as any).aspectRatio} R{selectedProduct.rim}

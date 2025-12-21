@@ -54,7 +54,31 @@ export async function upsertProduct(prevState: any, formData: FormData) {
     const aspectRatio = parseInt(formData.get('aspectRatio') as string)
     const rim = parseInt(formData.get('rim') as string)
     const imageUrl = formData.get('imageUrl') as string // Client uploads and sends URL
-    console.log("Upsert Product Debug:", { id, brand, imageUrl })
+    const galleryRaw = formData.get('gallery') as string
+    let gallery: string[] = []
+
+    if (galleryRaw) {
+        try {
+            gallery = JSON.parse(galleryRaw)
+        } catch (e) {
+            console.error("Failed to parse gallery JSON", e)
+            gallery = []
+        }
+    }
+
+    // Slug Logic
+    let slug = formData.get('slug') as string
+    if (!slug) {
+        // Auto-generate: Brand-Model-Specs
+        const rawSlug = `${brand}-${model}-${width}-${aspectRatio}-r${rim}`
+        slug = rawSlug.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with dash
+            .replace(/(^-|-$)/g, '')     // Trim dashes
+    }
+
+    const description = formData.get('description') as string
+
+    console.log("Upsert Product Debug:", { id, brand, imageUrl, galleryLength: gallery.length, slug })
 
     const productData = {
         brand,
@@ -64,7 +88,10 @@ export async function upsertProduct(prevState: any, formData: FormData) {
         width,
         aspect_ratio: aspectRatio,
         rim,
-        image_url: imageUrl || null
+        image_url: imageUrl || null,
+        gallery: gallery,
+        slug: slug,
+        description: description || null
     }
 
     let error

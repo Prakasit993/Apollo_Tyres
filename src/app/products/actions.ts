@@ -64,3 +64,43 @@ export async function getProducts(searchParams: { [key: string]: string | string
 
   return data;
 }
+
+export async function getProduct(idOrSlug: string) {
+  const supabase = await createClient();
+
+  // Check if it's a valid UUID
+  const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idOrSlug);
+
+  let query = supabase.from("tyres_products").select("*");
+
+  if (isUUID) {
+    query = query.eq("id", idOrSlug);
+  } else {
+    query = query.eq("slug", idOrSlug);
+  }
+
+  const { data, error } = await query.single();
+
+  if (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+  return data;
+}
+
+export async function getProductVariants(brand: string, model: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("tyres_products")
+    .select("id, slug, width, aspect_ratio, rim, stock, price")
+    .eq("brand", brand)
+    .eq("model", model)
+    .order("rim", { ascending: true })
+    .order("width", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching product variants:", error);
+    return [];
+  }
+  return data;
+}

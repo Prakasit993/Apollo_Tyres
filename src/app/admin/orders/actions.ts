@@ -35,20 +35,24 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
 export async function getAdminOrders() {
     const supabase = await createClient()
 
-    // Check role inside component or here? Better here for fetching.
-    // Assuming middleware/layout protects the page, but double check is good.
+    // Auth & Role Check to ensure only admins trigger this update
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return []
+
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (profile?.role !== 'admin') return []
 
     const { data: orders, error } = await supabase
         .from('tyres_orders')
         .select(`
             *,
             profiles:user_id (full_name, email, phone),
-            tyres_order_items (
+            order_items:tyres_order_items (
                 id,
                 quantity,
                 unit_price,
                 total_price,
-                tyres_products (brand, model)
+                products:tyres_products (brand, model)
             )
         `)
         .order('created_at', { ascending: false })
@@ -58,7 +62,32 @@ export async function getAdminOrders() {
         return []
     }
 
-    return orders
+    // Auto-cancel logic (Lazy check)
+    // If order is pending and older than 1 hour, cancel it.
+    const processedOrders = await Promise.all(orders.map(async (order) => {
+        if (order.status === 'pending') {
+            const createdAt = new Date(order.created_at).getTime()
+            const now = new Date().getTime()
+            const oneHour = 60 * 60 * 1000 // 1 Hour in milliseconds
+
+            if (now - createdAt > oneHour) {
+                // Perform cancellation
+                const { error: updateError } = await supabase
+                    .from('tyres_orders')
+                    .update({ status: 'cancelled' })
+                    .eq('id', order.id)
+
+                if (!updateError) {
+                    return { ...order, status: 'cancelled' }
+                } else {
+                    console.error(`Failed to auto-cancel order ${order.id}:`, updateError)
+                }
+            }
+        }
+        return order
+    }))
+
+    return processedOrders || []
 }
 
 export async function deleteOrder(orderId: string) {
