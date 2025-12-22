@@ -13,19 +13,7 @@ export default async function AdminDashboard() {
 
             <DashboardCharts data={stats} />
 
-            <div className="grid md:grid-cols-2 gap-8 mt-8 print:hidden">
-                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="font-bold text-lg mb-4">Quick Actions</h3>
-                    <div className="space-y-3">
-                        <Link href="/admin/products" className="block w-full text-center py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-gold-500 hover:text-gold-600 transition-colors">
-                            + Add New Product
-                        </Link>
-                        <Link href="/admin/orders" className="block w-full text-center py-3 bg-charcoal-900 text-white rounded-lg hover:bg-black transition-colors">
-                            Manage Orders
-                        </Link>
-                    </div>
-                </div>
-            </div>
+
         </div>
     )
 }

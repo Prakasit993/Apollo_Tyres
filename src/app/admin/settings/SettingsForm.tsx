@@ -4,26 +4,22 @@ import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
 import { updateSettings } from "./actions"
 
 interface SettingsFormProps {
     initialRemarks: string
-    initialBankName: string
-    initialBankAccNum: string
-    initialBankAccName: string
-    initialQrCodeUrl: string
+    initialPrivacyContent: string
+    initialTermsContent: string
 }
 
-export function SettingsForm({ initialRemarks, initialBankName, initialBankAccNum, initialBankAccName, initialQrCodeUrl }: SettingsFormProps) {
+export function SettingsForm({
+    initialRemarks,
+    initialPrivacyContent,
+    initialTermsContent
+}: SettingsFormProps) {
     const [remarks, setRemarks] = useState(initialRemarks || "")
-    const [bankName, setBankName] = useState(initialBankName || "")
-    const [bankAccNum, setBankAccNum] = useState(initialBankAccNum || "")
-    const [bankAccName, setBankAccName] = useState(initialBankAccName || "")
-    const [qrCodeUrl, setQrCodeUrl] = useState(initialQrCodeUrl || "")
-
-    // Simple file upload state
-    const [uploading, setUploading] = useState(false)
+    const [privacyContent, setPrivacyContent] = useState(initialPrivacyContent || "")
+    const [termsContent, setTermsContent] = useState(initialTermsContent || "")
 
     const [isPending, startTransition] = useTransition()
 
@@ -31,10 +27,8 @@ export function SettingsForm({ initialRemarks, initialBankName, initialBankAccNu
         startTransition(async () => {
             const results = await Promise.all([
                 updateSettings('checkout_remarks', remarks),
-                updateSettings('bank_name', bankName),
-                updateSettings('bank_account_number', bankAccNum),
-                updateSettings('bank_account_name', bankAccName),
-                updateSettings('qr_code_url', qrCodeUrl)
+                updateSettings('privacy_content', privacyContent),
+                updateSettings('terms_content', termsContent)
             ])
 
             const errors = results.filter(r => !r.success).map(r => r.message)
@@ -45,22 +39,6 @@ export function SettingsForm({ initialRemarks, initialBankName, initialBankAccNu
                 alert(`Failed to save some settings:\n${errors.join('\n')}`)
             }
         })
-    }
-
-    // Helper to upload QR code
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (!file) return
-
-        setUploading(true)
-        try {
-            // Placeholder for upload logic
-        } catch (error) {
-            console.error(error)
-            alert("Upload failed")
-        } finally {
-            setUploading(false)
-        }
     }
 
     return (
@@ -81,60 +59,34 @@ export function SettingsForm({ initialRemarks, initialBankName, initialBankAccNu
                 </div>
             </div>
 
-            {/* Bank Transfer Settings */}
+            {/* Legal Pages Section */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
-                <h2 className="text-lg font-bold">Bank Transfer Settings</h2>
+                <h2 className="text-lg font-bold">Legal Pages Content</h2>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="bankName">Bank Name (English/Thai)</Label>
-                        <Input
-                            id="bankName"
-                            value={bankName}
-                            onChange={(e) => setBankName(e.target.value)}
-                            placeholder="e.g. KBANK / Kasikorn"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="bankAccNum">Account Number</Label>
-                        <Input
-                            id="bankAccNum"
-                            value={bankAccNum}
-                            onChange={(e) => setBankAccNum(e.target.value)}
-                            placeholder="e.g. 123-4-56789-0"
-                            className="font-mono"
-                        />
-                    </div>
-
-                    <div className="col-span-2 space-y-2">
-                        <Label htmlFor="bankAccName">Account Name</Label>
-                        <Input
-                            id="bankAccName"
-                            value={bankAccName}
-                            onChange={(e) => setBankAccName(e.target.value)}
-                            placeholder="e.g. Apollo Shop Co., Ltd."
-                        />
-                    </div>
+                <div className="space-y-2">
+                    <Label htmlFor="privacy" className="font-semibold">Privacy Policy (HTML Supported)</Label>
+                    <p className="text-sm text-gray-500">
+                        Content for /privacy page. Leave empty to use default.
+                    </p>
+                    <Textarea
+                        id="privacy"
+                        value={privacyContent}
+                        onChange={(e) => setPrivacyContent(e.target.value)}
+                        className="min-h-[300px] font-mono text-sm"
+                    />
                 </div>
 
                 <div className="space-y-2 pt-4 border-t">
-                    <Label htmlFor="qrCodeUrl">QR Code Image URL</Label>
-                    <p className="text-xs text-muted-foreground">Upload your QR code to Supabase Storage (bucket 'slips' or similar) and paste the Public URL here.</p>
-                    <div className="flex gap-2">
-                        <input
-                            type="text"
-                            id="qrCodeUrl"
-                            value={qrCodeUrl}
-                            onChange={(e) => setQrCodeUrl(e.target.value)}
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        />
-                    </div>
-                    {qrCodeUrl && (
-                        <div className="mt-2 w-32 h-32 border rounded overflow-hidden bg-gray-50">
-                            <img src={qrCodeUrl} alt="QR Preview" className="w-full h-full object-contain" />
-                        </div>
-                    )}
+                    <Label htmlFor="terms" className="font-semibold">Terms of Service (HTML Supported)</Label>
+                    <p className="text-sm text-gray-500">
+                        Content for /terms page. Leave empty to use default.
+                    </p>
+                    <Textarea
+                        id="terms"
+                        value={termsContent}
+                        onChange={(e) => setTermsContent(e.target.value)}
+                        className="min-h-[300px] font-mono text-sm"
+                    />
                 </div>
             </div>
 

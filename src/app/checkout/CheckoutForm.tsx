@@ -460,7 +460,7 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                             </h2>
                             <div
                                 dangerouslySetInnerHTML={{ __html: remarks }}
-                                className="prose prose-sm prose-gray max-w-none prose-headings:font-bold prose-headings:text-inherit prose-a:text-blue-600 hover:prose-a:underline"
+                                className="prose prose-sm prose-gray max-w-none prose-headings:font-bold prose-headings:text-inherit prose-a:text-blue-600 hover:prose-a:underline whitespace-pre-line"
                             />
                         </div>
                     </div>

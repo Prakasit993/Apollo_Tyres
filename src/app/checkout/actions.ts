@@ -128,6 +128,33 @@ export async function placeOrder(
     }
 
     try {
+        // 2.5 Check Stock Availability
+        const { createAdminClient } = await import('@/lib/supabase-admin')
+        const supabaseAdmin = createAdminClient()
+
+        for (const item of cartItems) {
+            const { data: product, error: stockCheckError } = await supabaseAdmin
+                .from('tyres_products')
+                .select('stock, brand, model')
+                .eq('id', item.id)
+                .single()
+
+            if (stockCheckError || !product) {
+                console.error(`Stock check failed for ${item.id}`, stockCheckError)
+                return { message: "Error checking product stock. Please try again." }
+            }
+
+            if (product.stock < item.quantity) {
+                const { getContactSettings } = await import('@/app/admin/contact/actions')
+                const contact = await getContactSettings()
+                const contactInfo = [contact.phone1, contact.line ? `Line: ${contact.line}` : ''].filter(Boolean).join(' หรือ ')
+
+                return {
+                    message: `ขออภัย สินค้า ${product.brand} ${product.model} มีสินค้าไม่เพียงพอ กรุณาติดต่อ ${contactInfo}`
+                }
+            }
+        }
+
         // 3. Update Profile (Save latest address including granular fields)
         await supabase
             .from('profiles')
@@ -181,6 +208,53 @@ export async function placeOrder(
             // Ideally we should rollback here, but Supabase doesn't support transactions via Client easily yet without RPC.
             // For MVP, we assume consistency.
             throw new Error('Failed to add items')
+        }
+
+        // 5.5 Deduct Stock
+        try {
+            const { createAdminClient } = await import('@/lib/supabase-admin')
+            const supabaseAdmin = createAdminClient()
+
+            for (const item of cartItems) {
+                try {
+                    // Fetch current stock using Admin to bypass RLS
+                    const { data: product, error: fetchError } = await supabaseAdmin
+                        .from('tyres_products')
+                        .select('stock')
+                        .eq('id', item.id)
+                        .single()
+
+                    if (fetchError || !product) {
+                        console.error(`Failed to fetch stock for ${item.id}`, fetchError)
+                        continue
+                    }
+
+                    const newStock = product.stock - item.quantity
+
+                    // Double check to prevent negative stock (Race condition guard)
+                    if (newStock < 0) {
+                        console.error(`Insufficient stock for ${item.id} during deduction.`)
+                        // Ideally we should alert admin, but for now we log.
+                        // We continue to try to deduct others or stop? 
+                        // If we stop, we have partial deduction.
+                        // Let's throw to trigger adminClientError catch? No, per item catch.
+                        throw new Error("Stock became insufficient during processing")
+                    }
+
+                    const { error: updateError } = await supabaseAdmin
+                        .from('tyres_products')
+                        .update({ stock: newStock })
+                        .eq('id', item.id)
+
+                    if (updateError) {
+                        console.error(`Failed to update stock for ${item.id}`, updateError)
+                    }
+                } catch (e) {
+                    console.error(`Stock update exception for ${item.id}`, e)
+                }
+            }
+        } catch (adminClientError) {
+            console.error("Failed to initialize admin client for stock deduction", adminClientError)
         }
 
         // 6. Notify n8n Webhook (Fire and forget) + Send Email

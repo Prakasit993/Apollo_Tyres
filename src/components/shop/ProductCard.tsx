@@ -146,27 +146,33 @@ export function ProductCard({ variants }: ProductCardProps) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-2 mt-3">
-                    <Button
-                        onClick={handleAddToCart}
-                        className={cn(
-                            "flex-1 font-bold rounded-full h-9 text-xs uppercase tracking-wider shadow-md active:scale-95 transition-all duration-300",
-                            isAdded
-                                ? "bg-green-600 hover:bg-green-700 text-white"
-                                : "bg-gold-600 hover:bg-gold-700 text-white"
-                        )}
-                        disabled={isAdded}
-                    >
-                        {isAdded ? (
-                            <span className="flex items-center gap-2">
-                                <Check className="w-4 h-4" /> ADDED
-                            </span>
-                        ) : (
-                            <span className="flex items-center gap-2">
-                                <ShoppingCart className="w-4 h-4" /> ADD TO CART
-                            </span>
-                        )}
-                    </Button>
+                <div className="flex items-center gap-2 mt-3 min-h-[36px]">
+                    {selectedProduct.stock > 0 ? (
+                        <Button
+                            onClick={handleAddToCart}
+                            className={cn(
+                                "flex-1 font-bold rounded-full h-9 text-xs uppercase tracking-wider shadow-md active:scale-95 transition-all duration-300",
+                                isAdded
+                                    ? "bg-green-600 hover:bg-green-700 text-white"
+                                    : "bg-gold-600 hover:bg-gold-700 text-white"
+                            )}
+                            disabled={isAdded}
+                        >
+                            {isAdded ? (
+                                <span className="flex items-center gap-2">
+                                    <Check className="w-4 h-4" /> ADDED
+                                </span>
+                            ) : (
+                                <span className="flex items-center gap-2">
+                                    <ShoppingCart className="w-4 h-4" /> ADD TO CART
+                                </span>
+                            )}
+                        </Button>
+                    ) : (
+                        <div className="flex-1 h-9 flex items-center justify-center text-xs font-bold text-gray-400 uppercase bg-gray-100 rounded-full cursor-not-allowed">
+                            Out of Stock
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

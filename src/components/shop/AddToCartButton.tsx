@@ -33,6 +33,10 @@ export function AddToCartButton({ product }: { product: any }) {
         setTimeout(() => setIsAdded(false), 2000)
     }
 
+    if (product.stock <= 0) {
+        return null
+    }
+
     return (
         <Button
             onClick={handleAddToCart}

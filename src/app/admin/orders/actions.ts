@@ -14,6 +14,45 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
     if (profile?.role !== 'admin') return { message: "Forbidden" }
 
     try {
+        // 1. Check if we need to restore stock (Transition to CANCELLED)
+        if (newStatus === 'cancelled') {
+            const { data: currentOrder } = await supabase
+                .from('tyres_orders')
+                .select('status, tyres_order_items(product_id, quantity)')
+                .eq('id', orderId)
+                .single()
+
+            // Only restore if not already cancelled
+            if (currentOrder && currentOrder.status !== 'cancelled') {
+                const { createAdminClient } = await import('@/lib/supabase-admin')
+                const supabaseAdmin = createAdminClient()
+
+                const items = currentOrder.tyres_order_items as any[]
+                // Note: Typescript might not know the shape without types, casting to any[] for simplicity in this file
+
+                if (items && items.length > 0) {
+                    for (const item of items) {
+                        try {
+                            const { data: product } = await supabaseAdmin
+                                .from('tyres_products')
+                                .select('stock')
+                                .eq('id', item.product_id)
+                                .single()
+
+                            if (product) {
+                                await supabaseAdmin
+                                    .from('tyres_products')
+                                    .update({ stock: product.stock + item.quantity })
+                                    .eq('id', item.product_id)
+                            }
+                        } catch (err) {
+                            console.error(`Failed to restore stock for item ${item.product_id}`, err)
+                        }
+                    }
+                }
+            }
+        }
+
         const { error } = await supabase
             .from('tyres_orders')
             .update({ status: newStatus })
@@ -42,7 +81,10 @@ export async function getAdminOrders() {
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
     if (profile?.role !== 'admin') return []
 
-    const { data: orders, error } = await supabase
+    const { createAdminClient } = await import('@/lib/supabase-admin')
+    const supabaseAdmin = createAdminClient()
+
+    const { data: orders, error } = await supabaseAdmin
         .from('tyres_orders')
         .select(`
             *,
@@ -101,10 +143,42 @@ export async function deleteOrder(orderId: string) {
     if (profile?.role !== 'admin') return { message: "Forbidden" }
 
     try {
-        // Delete order items first (cascade should handle this usually, but explicit is safer if no cascade)
-        // Assuming database has ON DELETE CASCADE for order_items -> order_id
-        // If not, we'd delete items here. Let's assume standard cascade or just delete order.
+        // 1. Fetch order details for stock restoration
+        const { data: order } = await supabase
+            .from('tyres_orders')
+            .select('status, tyres_order_items(product_id, quantity)')
+            .eq('id', orderId)
+            .single()
 
+        // 2. Restore stock if not already cancelled
+        if (order && order.status !== 'cancelled') {
+            const { createAdminClient } = await import('@/lib/supabase-admin')
+            const supabaseAdmin = createAdminClient()
+            const items = order.tyres_order_items as any[]
+
+            if (items && items.length > 0) {
+                for (const item of items) {
+                    try {
+                        const { data: product } = await supabaseAdmin
+                            .from('tyres_products')
+                            .select('stock')
+                            .eq('id', item.product_id)
+                            .single()
+
+                        if (product) {
+                            await supabaseAdmin
+                                .from('tyres_products')
+                                .update({ stock: product.stock + item.quantity })
+                                .eq('id', item.product_id)
+                        }
+                    } catch (e) {
+                        console.error("Stock restore error during delete", e)
+                    }
+                }
+            }
+        }
+
+        // 3. Delete order
         const { error } = await supabase
             .from('tyres_orders')
             .delete()

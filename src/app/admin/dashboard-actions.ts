@@ -1,14 +1,25 @@
 'use server'
 
 import { createClient } from "@/lib/supabase-server"
+import { createAdminClient } from "@/lib/supabase-admin"
 
 export async function getDashboardStats() {
     const supabase = await createClient()
 
+    // Auth & Role Check
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error("Unauthorized")
+
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (profile?.role !== 'admin') throw new Error("Forbidden")
+
+    // Use Admin Client to bypass RLS for aggregate stats
+    const admin = createAdminClient()
+
     // 1. Fetch Totals
     // Revenue (Sum of total_price where status = 'completed' or 'paid' - let's assume 'paid' counts closely enough or strict 'completed')
     // Changing to 'paid', 'shipped', 'completed' for revenue calculation to be more realistic.
-    const { data: revenueData, error: revenueError } = await supabase
+    const { data: revenueData, error: revenueError } = await admin
         .from('tyres_orders')
         .select('total_price')
         .in('status', ['paid', 'shipped', 'completed'])
@@ -16,13 +27,13 @@ export async function getDashboardStats() {
     const totalRevenue = revenueData?.reduce((sum, order) => sum + (order.total_price || 0), 0) || 0
 
     // Pending Orders
-    const { count: pendingOrders } = await supabase
+    const { count: pendingOrders } = await admin
         .from('tyres_orders')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'pending')
 
     // Total Products
-    const { count: totalProducts } = await supabase
+    const { count: totalProducts } = await admin
         .from('tyres_products')
         .select('*', { count: 'exact', head: true })
 
@@ -30,7 +41,7 @@ export async function getDashboardStats() {
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-    const { data: salesData } = await supabase
+    const { data: salesData } = await admin
         .from('tyres_orders')
         .select('created_at, total_price')
         .in('status', ['paid', 'shipped', 'completed'])
@@ -66,7 +77,7 @@ export async function getDashboardStats() {
 
 
     // 3. Order Status Distribution
-    const { data: statusData } = await supabase
+    const { data: statusData } = await admin
         .from('tyres_orders')
         .select('status')
 
