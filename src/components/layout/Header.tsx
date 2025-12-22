@@ -1,9 +1,10 @@
 import Link from "next/link"
-import { ShoppingCart, Menu, User } from "lucide-react"
+import { ShoppingCart, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase-server"
 import { signout } from "@/app/login/actions"
 import { CartButton } from "./CartButton"
+import { MobileMenu } from "./MobileMenu"
 
 export async function Header() {
     const supabase = await createClient()
@@ -63,14 +64,7 @@ export async function Header() {
 
                     {user && <CartButton />}
 
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="md:hidden h-10 w-10 rounded-full text-white hover:bg-white/10 focus-visible:ring-0"
-                    >
-                        <Menu className="h-6 w-6" />
-                        <span className="sr-only">Menu</span>
-                    </Button>
+                    <MobileMenu />
                 </div>
             </div>
         </header>
