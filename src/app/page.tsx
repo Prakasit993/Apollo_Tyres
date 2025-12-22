@@ -1,4 +1,4 @@
-import { Hero } from "@/components/home/Hero"
+import { HeroModern } from "@/components/home/HeroModern"
 import { FilterSidebar } from "@/components/shop/FilterSidebar"
 import { MapWidget } from "@/components/home/MapWidget"
 import { Reviews } from "@/components/home/Reviews"
@@ -15,9 +15,9 @@ export default async function Home() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="bg-cream-50 min-h-screen pb-20 overflow-x-hidden">
+    <div className="bg-neutral-900 min-h-screen pb-20 overflow-x-hidden">
       {/* Hero Section */}
-      <Hero />
+      <HeroModern />
 
       {/* Main Content Area */}
       <div className="relative">
@@ -50,7 +50,7 @@ export default async function Home() {
         />
 
         <div className="container mx-auto px-4 py-12 max-w-7xl relative z-10 flex flex-col items-center">
-          <h2 className="font-heading text-4xl md:text-5xl font-black text-charcoal-900 uppercase italic tracking-tighter mb-12 border-b-4 border-gold-500 inline-block text-center">
+          <h2 className="font-heading text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter mb-12 border-b-4 border-blue-600 inline-block text-center">
             SHOP TIRES
           </h2>
 

@@ -62,7 +62,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-7xl">
-            <h1 className="text-3xl font-black text-charcoal-900 mb-8">All Products</h1>
+            <h1 className="text-3xl font-black text-white mb-8">All Products</h1>
 
             <div className="flex flex-col lg:flex-row gap-8">
                 <div className="w-full lg:w-1/4 shrink-0">
@@ -75,7 +75,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                             <PaginationControls currentPage={page} totalPages={totalPages} />
                         </>
                     ) : (
-                        <div className="text-center py-20 bg-gray-50 rounded-lg">
+                        <div className="text-center py-20 bg-neutral-800 rounded-lg">
                             <h3 className="text-xl font-bold text-gray-400">No products found</h3>
                             <p className="text-gray-400">Try adjusting your filters.</p>
                         </div>

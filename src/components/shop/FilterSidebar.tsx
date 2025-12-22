@@ -57,26 +57,26 @@ export function FilterSidebar() {
     }
 
     return (
-        <aside className="w-full space-y-6 rounded-lg border border-border bg-white p-4 shadow-sm">
+        <aside className="w-full space-y-6 rounded-lg border border-neutral-700 bg-neutral-800 p-4 shadow-sm">
             <div className="space-y-2">
-                <h3 className="text-lg font-bold text-charcoal-900 flex items-center gap-2">
-                    <Search className="w-4 h-4 text-gold-500" />
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <Search className="w-4 h-4 text-blue-500" />
                     FIND YOUR TIRES
                 </h3>
-                <p className="text-xs text-muted-foreground">Filter by size, brand, or vehicle.</p>
+                <p className="text-xs text-gray-400">Filter by size, brand, or vehicle.</p>
             </div>
 
             <form action={formAction} className="space-y-4" key={searchParams.toString()}>
                 {/* Search by Car Model */}
                 <div className="space-y-1.5">
-                    <label className="text-sm font-medium flex items-center gap-2">
-                        <Car className="w-4 h-4 text-gold-500" /> Select Car Model
+                    <label className="text-sm font-medium flex items-center gap-2 text-gray-200">
+                        <Car className="w-4 h-4 text-blue-500" /> Select Car Model
                     </label>
                     <select
                         name="carModel" // Not directly used in filter, but useful for UI state
                         value={selectedCar}
                         onChange={handleCarChange}
-                        className="w-full px-3 py-2 text-sm border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-gold-500 bg-white"
+                        className="w-full px-3 py-2 text-sm border border-neutral-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-neutral-700 text-white"
                     >
                         <option value="">-- Choose Your Car --</option>
                         {CAR_MODELS.map((car) => (
@@ -88,18 +88,18 @@ export function FilterSidebar() {
                 </div>
 
                 <div className="relative flex items-center py-2">
-                    <div className="grow border-t border-gray-200"></div>
-                    <span className="shrink-0 px-2 text-xs text-gray-400 font-medium uppercase">OR SEARCH MANUALLY</span>
-                    <div className="grow border-t border-gray-200"></div>
+                    <div className="grow border-t border-gray-700"></div>
+                    <span className="shrink-0 px-2 text-xs text-gray-500 font-medium uppercase">OR SEARCH MANUALLY</span>
+                    <div className="grow border-t border-gray-700"></div>
                 </div>
 
                 {/* Brand Filter */}
                 <div className="space-y-1.5">
-                    <label className="text-sm font-medium">Tire Brand</label>
+                    <label className="text-sm font-medium text-gray-200">Tire Brand</label>
                     <select
                         name="brand"
                         defaultValue={searchParams.get('brand') || ''}
-                        className="w-full px-3 py-2 text-sm border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-gold-500 bg-white"
+                        className="w-full px-3 py-2 text-sm border border-neutral-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-neutral-700 text-white"
                     >
                         <option value="">All Brands</option>
                         <option value="Apollo">Apollo</option>
@@ -112,12 +112,12 @@ export function FilterSidebar() {
                 {/* Specs - Controlled Components */}
                 <div className="grid grid-cols-3 gap-2">
                     <div className="space-y-1.5">
-                        <label className="text-xs font-medium">Width</label>
+                        <label className="text-xs font-medium text-gray-200">Width</label>
                         <select
                             name="width"
                             value={width}
                             onChange={(e) => setWidth(e.target.value)}
-                            className="w-full px-2 py-2 text-sm border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-gold-500 bg-white"
+                            className="w-full px-2 py-2 text-sm border border-neutral-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-neutral-700 text-white"
                         >
                             <option value="">Any</option>
                             <option value="175">175</option>
@@ -129,12 +129,12 @@ export function FilterSidebar() {
                         </select>
                     </div>
                     <div className="space-y-1.5">
-                        <label className="text-xs font-medium">Aspect</label>
+                        <label className="text-xs font-medium text-gray-200">Aspect</label>
                         <select
                             name="aspect"
                             value={aspect}
                             onChange={(e) => setAspect(e.target.value)}
-                            className="w-full px-2 py-2 text-sm border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-gold-500 bg-white"
+                            className="w-full px-2 py-2 text-sm border border-neutral-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-neutral-700 text-white"
                         >
                             <option value="">Any</option>
                             <option value="50">50</option>
@@ -145,12 +145,12 @@ export function FilterSidebar() {
                         </select>
                     </div>
                     <div className="space-y-1.5">
-                        <label className="text-xs font-medium">Rim</label>
+                        <label className="text-xs font-medium text-gray-200">Rim</label>
                         <select
                             name="rim"
                             value={rim}
                             onChange={(e) => setRim(e.target.value)}
-                            className="w-full px-2 py-2 text-sm border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-gold-500 bg-white"
+                            className="w-full px-2 py-2 text-sm border border-neutral-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-neutral-700 text-white"
                         >
                             <option value="">Any</option>
                             <option value="13">13</option>
@@ -165,34 +165,34 @@ export function FilterSidebar() {
 
                 {/* Price Range */}
                 <div className="space-y-1.5">
-                    <label className="text-sm font-medium">Price Range</label>
+                    <label className="text-sm font-medium text-gray-200">Price Range</label>
                     <div className="flex items-center gap-2">
                         <input
                             type="number"
                             name="minPrice"
                             defaultValue={searchParams.get('min') || ''}
                             placeholder="Min"
-                            className="w-full px-3 py-2 text-sm border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-gold-500"
+                            className="w-full px-3 py-2 text-sm border border-neutral-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-neutral-700 text-white placeholder-gray-400"
                         />
-                        <span className="text-muted-foreground">-</span>
+                        <span className="text-gray-400">-</span>
                         <input
                             type="number"
                             name="maxPrice"
                             defaultValue={searchParams.get('max') || ''}
                             placeholder="Max"
-                            className="w-full px-3 py-2 text-sm border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-gold-500"
+                            className="w-full px-3 py-2 text-sm border border-neutral-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-neutral-700 text-white placeholder-gray-400"
                         />
                     </div>
                 </div>
 
                 <div className="pt-4 flex flex-col gap-2">
-                    <Button type="submit" disabled={isPending} className="w-full bg-gold-500 text-black hover:bg-gold-600 font-bold">
+                    <Button type="submit" disabled={isPending} className="w-full bg-blue-600 text-white hover:bg-blue-500 font-bold border-none">
                         {isPending ? "SEARCHING..." : "APPLY FILTER"}
                     </Button>
                     <Button
                         type="button"
-                        variant="outline"
-                        className="w-full gap-2"
+                        variant="ghost"
+                        className="w-full gap-2 text-gray-400 hover:text-white hover:bg-neutral-700 border border-neutral-600"
                         onClick={handleReset}
                     >
                         <RotateCcw className="w-4 h-4" />

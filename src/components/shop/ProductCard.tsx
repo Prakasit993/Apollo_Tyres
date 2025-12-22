@@ -52,17 +52,17 @@ export function ProductCard({ variants }: ProductCardProps) {
     const hasMultipleVariants = variants.length > 1;
 
     return (
-        <div className="group relative bg-white border border-border/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full rounded-sm overflow-hidden">
+        <div className="group relative bg-neutral-800 border border-neutral-700 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full rounded-sm overflow-hidden">
 
             {/* Top Brand Logo Area (Mock) */}
             <div className="absolute top-4 left-4 z-10">
-                <span className="font-extrabold text-charcoal-900/40 text-lg uppercase tracking-widest transition-opacity duration-300 opacity-50 group-hover:opacity-100">
+                <span className="font-extrabold text-white/20 text-lg uppercase tracking-widest transition-opacity duration-300 opacity-50 group-hover:opacity-100">
                     {selectedProduct.brand}
                 </span>
             </div>
 
-            {/* Image Section - Gold Background Style */}
-            <Link href={`/products/${(selectedProduct as any).slug || selectedProduct.id}`} className="block relative aspect-square p-8 flex items-center justify-center overflow-hidden transition-colors bg-[#E8C872] cursor-pointer">
+            {/* Image Section - Light Background for Contrast */}
+            <Link href={`/products/${(selectedProduct as any).slug || selectedProduct.id}`} className="block relative aspect-square p-8 flex items-center justify-center overflow-hidden transition-colors bg-white cursor-pointer">
                 {/* Brand Logo Watermark effect could go here */}
 
                 {/* Product Image */}
@@ -83,7 +83,7 @@ export function ProductCard({ variants }: ProductCardProps) {
 
                 {/* Hot/Sale Badge */}
                 {selectedProduct.featured && (
-                    <div className="absolute top-0 right-0 bg-charcoal-900 text-gold-500 text-xs font-bold px-3 py-1">
+                    <div className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1">
                         HOT
                     </div>
                 )}
@@ -94,13 +94,13 @@ export function ProductCard({ variants }: ProductCardProps) {
 
                 {/* Title */}
                 <div className="mb-2">
-                    <Link href={`/products/${(selectedProduct as any).slug || selectedProduct.id}`} className="hover:text-gold-600 transition-colors">
-                        <h3 className="font-black text-lg text-charcoal-900 uppercase leading-tight line-clamp-1">
+                    <Link href={`/products/${(selectedProduct as any).slug || selectedProduct.id}`} className="hover:text-blue-400 transition-colors">
+                        <h3 className="font-black text-lg text-white uppercase leading-tight line-clamp-1">
                             {selectedProduct.brand} {selectedProduct.model}
                         </h3>
                     </Link>
                     {!hasMultipleVariants && (
-                        <p className="text-muted-foreground text-sm font-medium">
+                        <p className="text-gray-400 text-sm font-medium">
                             {selectedProduct.width}/{(selectedProduct as any).aspectRatio} R{selectedProduct.rim}
                         </p>
                     )}
@@ -109,7 +109,7 @@ export function ProductCard({ variants }: ProductCardProps) {
                 {/* Size Selector (If multiple variants) */}
                 {hasMultipleVariants && (
                     <div className="mb-3">
-                        <label className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1 block">
+                        <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1 block">
                             Select Size
                         </label>
                         <Select
@@ -119,7 +119,7 @@ export function ProductCard({ variants }: ProductCardProps) {
                                 if (p) setSelectedProduct(p)
                             }}
                         >
-                            <SelectTrigger className="w-full h-8 text-xs font-medium">
+                            <SelectTrigger className="w-full h-8 text-xs font-medium bg-neutral-700 text-white border-neutral-600">
                                 <SelectValue placeholder="Select Size" />
                             </SelectTrigger>
                             <SelectContent>
@@ -134,12 +134,12 @@ export function ProductCard({ variants }: ProductCardProps) {
                 )}
 
                 {/* Price and Stock */}
-                <div className="mt-auto flex items-end justify-between border-t border-border pt-3">
+                <div className="mt-auto flex items-end justify-between border-t border-neutral-700 pt-3">
                     <div>
-                        <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
+                        <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">
                             {hasMultipleVariants ? 'Starts at' : 'Per Unit'}
                         </p>
-                        <p className="text-xl font-black text-charcoal-900">
+                        <p className="text-xl font-black text-white">
                             {selectedProduct.price.toLocaleString()} THB
                         </p>
                     </div>
@@ -154,7 +154,7 @@ export function ProductCard({ variants }: ProductCardProps) {
                                 "flex-1 font-bold rounded-full h-9 text-xs uppercase tracking-wider shadow-md active:scale-95 transition-all duration-300",
                                 isAdded
                                     ? "bg-green-600 hover:bg-green-700 text-white"
-                                    : "bg-gold-600 hover:bg-gold-700 text-white"
+                                    : "bg-blue-600 hover:bg-blue-700 text-white"
                             )}
                             disabled={isAdded}
                         >
@@ -169,7 +169,7 @@ export function ProductCard({ variants }: ProductCardProps) {
                             )}
                         </Button>
                     ) : (
-                        <div className="flex-1 h-9 flex items-center justify-center text-xs font-bold text-gray-400 uppercase bg-gray-100 rounded-full cursor-not-allowed">
+                        <div className="flex-1 h-9 flex items-center justify-center text-xs font-bold text-gray-600 uppercase bg-neutral-900 rounded-full cursor-not-allowed">
                             Out of Stock
                         </div>
                     )}

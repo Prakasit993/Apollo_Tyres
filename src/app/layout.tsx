@@ -47,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${kanit.variable} ${oswald.variable} antialiased min-h-screen flex flex-col bg-cream-50 text-charcoal-900 font-sans`}>
+      <body className={`${kanit.variable} ${oswald.variable} antialiased min-h-screen flex flex-col bg-neutral-900 text-gray-100 font-sans`}>
         <Header />
         <main className="flex-1">
           {children}
