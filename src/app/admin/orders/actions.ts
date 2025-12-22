@@ -3,6 +3,8 @@
 import { createClient } from "@/lib/supabase-server"
 import { revalidatePath } from "next/cache"
 
+import { recordTransaction, deleteTransactionByReference } from "../finance/accounting/actions"
+
 export async function updateOrderStatus(orderId: string, newStatus: string) {
     const supabase = await createClient()
 
@@ -61,6 +63,33 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
         if (error) {
             console.error("Update Status Error:", error)
             return { message: "Failed to update status" }
+        }
+
+        // 1. Auto-remove from Google Sheets if Cancelled
+        if (newStatus === 'cancelled') {
+            await deleteTransactionByReference(orderId)
+        }
+
+        // 2. Auto-record Income to Google Sheets when order is Paid/Processing
+        if (newStatus === 'paid' || newStatus === 'processing') {
+            const { data: orderData } = await supabase
+                .from('tyres_orders')
+                .select('total_price, id, profiles:user_id(full_name)')
+                .eq('id', orderId)
+                .single()
+
+            if (orderData) {
+                // @ts-ignore
+                const customerName = orderData.profiles?.full_name || 'Customer'
+                await recordTransaction({
+                    date: new Date().toISOString().split('T')[0],
+                    type: 'Income',
+                    category: 'Product Sale',
+                    amount: orderData.total_price,
+                    description: `Order Sales - ${customerName}`,
+                    referenceId: orderId
+                })
+            }
         }
 
         revalidatePath('/admin/orders')
@@ -188,6 +217,9 @@ export async function deleteOrder(orderId: string) {
             console.error("Delete Order Error:", error)
             return { message: "Failed to delete order" }
         }
+
+        // Auto-remove transaction from Sheet
+        await deleteTransactionByReference(orderId)
 
         revalidatePath('/admin/orders')
         return { success: true, message: "Order deleted successfully" }

@@ -12,7 +12,65 @@ const TransactionSchema = z.object({
     date: z.string() // YYYY-MM-DD
 })
 
+import { createClient } from "@/lib/supabase-server"
+
+// Helper for programmatic access
+export async function recordTransaction(data: {
+    date: string,
+    type: 'Income' | 'Expense',
+    category: string,
+    amount: number,
+    description?: string,
+    referenceId?: string
+}) {
+    try {
+        const sheet = await getTransactionsSetup()
+        await sheet.addRow({
+            'Date': data.date,
+            'Type': data.type,
+            'Category': data.category,
+            'Amount': data.amount,
+            'Description': data.description || '',
+            'ReferenceID': data.referenceId || `MANUAL-${Date.now()}`
+        })
+        return { success: true }
+    } catch (e: any) {
+        console.error("Record Transaction Error:", e)
+        return { success: false, message: e.message }
+    }
+}
+
+// Helper to delete transaction by ReferenceID
+export async function deleteTransactionByReference(referenceId: string) {
+    try {
+        const sheet = await getTransactionsSetup()
+        const rows = await sheet.getRows()
+
+        // Find rows causing duplicates? delete all matching
+        const rowsToDelete = rows.filter(row => {
+            const data = row.toObject()
+            return data.ReferenceID === referenceId
+        })
+
+        for (const row of rowsToDelete) {
+            await row.delete()
+        }
+
+        return { success: true, count: rowsToDelete.length }
+    } catch (e: any) {
+        console.error("Delete Transaction Error:", e)
+        return { success: false, message: e.message }
+    }
+}
+
 export async function addTransaction(prevState: any, formData: FormData) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { message: "Unauthorized" }
+
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (profile?.role !== 'admin') return { message: "Forbidden" }
+
     try {
         const rawData = {
             type: formData.get('type'),
@@ -25,20 +83,20 @@ export async function addTransaction(prevState: any, formData: FormData) {
         const validated = TransactionSchema.safeParse(rawData)
 
         if (!validated.success) {
-            return { message: validated.error.errors[0].message }
+            return { message: validated.error.issues[0].message }
         }
 
         const { type, category, amount, description, date } = validated.data
-        const sheet = await getTransactionsSetup()
 
-        await sheet.addRow({
-            'Date': date,
-            'Type': type,
-            'Category': category,
-            'Amount': amount,
-            'Description': description || '',
-            'ReferenceID': `MANUAL-${Date.now()}`
+        const result = await recordTransaction({
+            date,
+            type,
+            category,
+            amount,
+            description,
         })
+
+        if (!result.success) throw new Error(result.message)
 
         revalidatePath('/admin/finance/accounting')
         return { success: true, message: "Transaction added successfully" }
@@ -50,6 +108,13 @@ export async function addTransaction(prevState: any, formData: FormData) {
 }
 
 export async function getRecentTransactions() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return []
+
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (profile?.role !== 'admin') return []
+
     try {
         const sheet = await getTransactionsSetup()
         const rows = await sheet.getRows({ limit: 20, offset: 0 }) // Get recent 20
@@ -73,6 +138,13 @@ export async function getRecentTransactions() {
 }
 
 export async function getFinancialStats() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { income: 0, expense: 0, profit: 0 }
+
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (profile?.role !== 'admin') return { income: 0, expense: 0, profit: 0 }
+
     try {
         const sheet = await getTransactionsSetup()
         const rows = await sheet.getRows() // Get all rows for calculation
