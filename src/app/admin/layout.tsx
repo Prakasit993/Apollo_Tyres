@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Package, ShoppingCart, BarChart3, LogOut, Home, Star, MapPin, CreditCard, FileText } from "lucide-react"
+import { AdminNavLinks } from "@/components/layout/AdminNavLinks"
+import { AdminMobileMenu } from "@/components/layout/AdminMobileMenu"
 
 export default async function AdminLayout({
     children,
@@ -39,59 +40,30 @@ export default async function AdminLayout({
         )
     }
 
+
     return (
-        <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <aside className="w-64 bg-charcoal-900 text-white shrink-0 hidden md:block">
+        <div className="flex min-h-screen bg-gray-100 flex-col md:flex-row">
+            {/* Sidebar (Desktop) */}
+            <aside className="w-64 bg-charcoal-900 text-white shrink-0 hidden md:block min-h-screen">
                 <div className="p-6 border-b border-gray-800">
                     <h2 className="text-xl font-heading font-bold text-gold-500">ระบบจัดการร้าน</h2>
                 </div>
-                <nav className="p-4 space-y-2">
-                    <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <BarChart3 className="w-5 h-5" />
-                        ภาพรวม
-                    </Link>
-                    <Link href="/admin/products" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <Package className="w-5 h-5" />
-                        สินค้า
-                    </Link>
-                    <Link href="/admin/orders" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <ShoppingCart className="w-5 h-5" />
-                        คำสั่งซื้อ
-                    </Link>
-                    <Link href="/admin/finance" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <CreditCard className="w-5 h-5" />
-                        การเงิน
-                    </Link>
-                    <Link href="/admin/finance/accounting" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <FileText className="w-5 h-5" />
-                        บัญชี
-                    </Link>
-                    <Link href="/admin/reviews" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <Star className="w-5 h-5" />
-                        รีวิวลูกค้า
-                    </Link>
-                    <Link href="/admin/contact" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <MapPin className="w-5 h-5" />
-                        ข้อมูลร้าน
-                    </Link>
-                    <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>
-                        ตั้งค่า
-                    </Link>
-                </nav>
+                <AdminNavLinks />
                 <div className="p-4 absolute bottom-0 w-64 border-t border-gray-800">
-                    <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors mb-2">
-                        <Home className="w-5 h-5" />
-                        หน้าร้านสินค้า
-                    </Link>
+                    {/* Optional footer links if needed */}
                 </div>
             </aside>
 
-            {/* Mobile Header (simplified) */}
+            {/* Mobile Header */}
+            <header className="md:hidden bg-charcoal-900 text-white p-4 flex items-center justify-between sticky top-0 z-40 shadow-md">
+                <div className="flex items-center gap-3">
+                    <AdminMobileMenu />
+                    <span className="font-heading font-bold text-gold-500 text-lg">ระบบจัดการร้าน</span>
+                </div>
+            </header>
 
             {/* Main Content */}
-            <main className="flex-1 p-8 overflow-y-auto">
+            <main className="flex-1 p-4 md:p-8 overflow-y-auto">
                 <div className="max-w-6xl mx-auto">
                     {children}
                 </div>

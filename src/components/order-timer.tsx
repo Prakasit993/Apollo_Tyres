@@ -49,12 +49,12 @@ export function OrderTimer({ createdAt, onExpire }: OrderTimerProps) {
         return () => clearInterval(interval)
     }, [createdAt, router, onExpire])
 
-    if (isExpired) return <span className="text-red-600 font-bold">Expired</span>
+    if (isExpired) return <span className="text-red-600 font-bold">หมดเวลาชำระเงิน</span>
 
     return (
         <div className="flex items-center gap-1.5 text-orange-600 font-medium bg-orange-50 px-3 py-1 rounded-full text-xs">
             <Clock size={14} />
-            <span>Pay within {timeLeft}</span>
+            <span>ชำระภายใน {timeLeft}</span>
         </div>
     )
 }

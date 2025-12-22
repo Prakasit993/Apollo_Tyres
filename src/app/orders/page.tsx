@@ -74,21 +74,21 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600">
                         <CheckCircle size={32} />
                     </div>
-                    <h2 className="text-2xl font-bold text-green-800 mb-2">Order Placed Successfully!</h2>
-                    <p className="text-green-700">Thank you for your purchase. We will contact you shortly to confirm delivery.</p>
+                    <h2 className="text-2xl font-bold text-green-800 mb-2">สั่งซื้อสินค้าเรียบร้อยแล้ว!</h2>
+                    <p className="text-green-700">ขอบคุณสำหรับการสั่งซื้อ เราจะติดต่อกลับโดยเร็วที่สุดเพื่อยืนยันการจัดส่ง</p>
                 </div>
             )}
 
             <h1 className="text-4xl font-black text-charcoal-900 mb-8 uppercase italic border-b-4 border-gold-500 inline-block">
-                My Orders
+                รายการคำสั่งซื้อ
             </h1>
 
             {!orders || orders.length === 0 ? (
                 <div className="text-center py-20 bg-white rounded-lg border border-border/50">
                     <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-gray-400">No orders yet</h3>
+                    <h3 className="text-xl font-bold text-gray-400">ยังไม่มีคำสั่งซื้อ</h3>
                     <Link href="/products" className="text-gold-600 hover:underline mt-2 inline-block">
-                        Go shop for some tires!
+                        เลือกซื้อสินค้าเลย!
                     </Link>
                 </div>
             ) : (
@@ -98,11 +98,11 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                             <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 flex flex-wrap gap-4 justify-between items-center">
 
                                 <div>
-                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-bold">Date</p>
-                                    <p className="font-medium">{new Date(order.created_at).toLocaleDateString()}</p>
+                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-bold">วันที่สั่งซื้อ</p>
+                                    <p className="font-medium">{new Date(order.created_at).toLocaleDateString('th-TH')}</p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-bold">Total</p>
+                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-bold">ยอดรวม</p>
                                     <p className="font-black text-gold-600">฿{order.total_price.toLocaleString()}</p>
                                 </div>
                                 <div>
@@ -112,7 +112,9 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                                                 order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                                                     'bg-gray-100 text-gray-800'
                                             }`}>
-                                            {order.status}
+                                            {order.status === 'pending' ? 'รอชำระเงิน' :
+                                                order.status === 'paid' ? 'ชำระแล้ว' :
+                                                    order.status === 'cancelled' ? 'ยกเลิก' : order.status}
                                         </span>
                                         {order.status === 'pending' && (
                                             <OrderTimer createdAt={order.created_at} />
@@ -132,7 +134,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                                             </div>
                                             <div className="flex-1">
                                                 <p className="font-bold text-charcoal-900">{item.product?.brand} {item.product?.model}</p>
-                                                <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                                                <p className="text-sm text-gray-500">จำนวน: {item.quantity}</p>
                                             </div>
                                             <div className="font-medium">
                                                 ฿{item.total_price.toLocaleString()}
@@ -141,8 +143,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
                                     ))}
                                 </div>
                                 <div className="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center text-sm text-gray-500">
-                                    <p>Payment: <span className="uppercase">{order.payment_method}</span></p>
-                                    <p>Delivery: <span className="uppercase">{order.delivery_method}</span></p>
+                                    <p>ชำระเงิน: <span className="uppercase">{order.payment_method === 'transfer' ? 'โอนผ่านบัญชีธนาคาร' : order.payment_method}</span></p>
+                                    <p>จัดส่ง: <span className="uppercase">{order.delivery_method === 'pickup' ? 'รับสินค้าที่ร้าน' : 'จัดส่งพัสดุ'}</span></p>
                                 </div>
                             </div>
                         </div>
