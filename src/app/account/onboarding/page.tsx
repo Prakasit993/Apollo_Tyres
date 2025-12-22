@@ -18,42 +18,42 @@ export default function OnboardingPage() {
                     <p className="text-gold-500 text-sm mt-1">Please complete your profile to continue</p>
                 </div>
 
-                <form action={formAction} className="p-8 space-y-6">
+                <form action={formAction} className="p-8 space-y-6 text-charcoal-900">
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="fullName">Full Name (ชื่อ-นามสกุล)</Label>
-                            <Input id="fullName" name="fullName" required placeholder="สมชาย ใจดี" />
+                            <Input id="fullName" name="fullName" required placeholder="สมชาย ใจดี" className="bg-gray-50 border-gray-200 text-charcoal-900 placeholder:text-gray-400" />
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="phone">Phone Number (เบอร์โทร)</Label>
-                            <Input id="phone" name="phone" type="tel" required placeholder="0812345678" />
+                            <Input id="phone" name="phone" type="tel" required placeholder="0812345678" className="bg-gray-50 border-gray-200 text-charcoal-900 placeholder:text-gray-400" />
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="address">Address (ที่อยู่ / บ้านเลขที่ / ซอย)</Label>
-                            <Textarea id="address" name="address" required placeholder="123/45 หมู่บ้าน..." />
+                            <Textarea id="address" name="address" required placeholder="123/45 หมู่บ้าน..." className="bg-gray-50 border-gray-200 text-charcoal-900 placeholder:text-gray-400" />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="district">District (ตำบล/แขวง)</Label>
-                                <Input id="district" name="district" required />
+                                <Input id="district" name="district" required className="bg-gray-50 border-gray-200 text-charcoal-900" />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="amphoe">Amphoe (อำเภอ/เขต)</Label>
-                                <Input id="amphoe" name="amphoe" required />
+                                <Input id="amphoe" name="amphoe" required className="bg-gray-50 border-gray-200 text-charcoal-900" />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="province">Province (จังหวัด)</Label>
-                                <Input id="province" name="province" required />
+                                <Input id="province" name="province" required className="bg-gray-50 border-gray-200 text-charcoal-900" />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="zipcode">Zipcode (รหัสไปรษณีย์)</Label>
-                                <Input id="zipcode" name="zipcode" required />
+                                <Input id="zipcode" name="zipcode" required className="bg-gray-50 border-gray-200 text-charcoal-900" />
                             </div>
                         </div>
                     </div>

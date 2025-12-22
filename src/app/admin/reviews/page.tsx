@@ -8,11 +8,11 @@ export default async function AdminReviewsPage() {
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-black text-charcoal-900">Manage Customer Reviews</h1>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <h1 className="text-xl md:text-3xl font-black text-charcoal-900">จัดการรีวิวลูกค้า</h1>
                 <Link href="/admin/reviews/new">
                     <Button className="bg-gold-500 text-black hover:bg-gold-600 font-bold">
-                        <Plus className="mr-2 h-4 w-4" /> Add Review
+                        <Plus className="mr-2 h-4 w-4" /> เพิ่มรีวิว
                     </Button>
                 </Link>
             </div>
@@ -22,17 +22,17 @@ export default async function AdminReviewsPage() {
                     <table className="w-full">
                         <thead className="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Customer</th>
-                                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Comment</th>
-                                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Rating</th>
-                                <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ลูกค้า</th>
+                                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ความคิดเห็น</th>
+                                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">คะแนน</th>
+                                <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {reviews.length === 0 ? (
                                 <tr>
                                     <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                                        No reviews found. Add one to get started.
+                                        ไม่พบรีวิวในระบบ เริ่มต้นสร้างรีวิวใหม่ได้เลย
                                     </td>
                                 </tr>
                             ) : (

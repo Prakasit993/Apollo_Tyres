@@ -11,12 +11,12 @@ export default async function AdminProductsPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-heading font-bold text-charcoal-900">Products</h1>
-                    <p className="text-gray-500">Manage your tire inventory.</p>
+                    <h1 className="text-xl md:text-3xl font-heading font-bold text-charcoal-900">สินค้า</h1>
+                    <p className="text-gray-500">จัดการสินค้าและสต็อกยางของคุณ</p>
                 </div>
                 <Link href="/admin/products/new">
                     <Button className="bg-gold-500 text-black hover:bg-gold-600 font-bold">
-                        + Add Product
+                        + เพิ่มสินค้า
                     </Button>
                 </Link>
             </div>

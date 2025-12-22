@@ -10,7 +10,7 @@ export default async function AccountingPage() {
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-heading font-bold text-charcoal-900">บัญชีรายรับ-รายจ่าย (Google Sheets)</h1>
+            <h1 className="text-xl md:text-3xl font-heading font-bold text-charcoal-900">บัญชีรายรับ-รายจ่าย (Google Sheets)</h1>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
