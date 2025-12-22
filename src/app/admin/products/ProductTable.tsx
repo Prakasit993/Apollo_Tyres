@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Edit, Trash2, MoreHorizontal } from "lucide-react"
 import { deleteProduct } from "./actions"
 import { Button } from "@/components/ui/button"
@@ -20,6 +21,7 @@ interface Product {
 }
 
 export function ProductTable({ initialProducts }: { initialProducts: any[] }) {
+    const router = useRouter()
     const [isDeleting, setIsDeleting] = useState<string | null>(null)
 
     async function handleDelete(id: string) {
@@ -28,6 +30,7 @@ export function ProductTable({ initialProducts }: { initialProducts: any[] }) {
         setIsDeleting(id)
         const result = await deleteProduct(id)
         setIsDeleting(null)
+        router.refresh()
 
         if (result.message && !result.success) {
             alert(result.message)
