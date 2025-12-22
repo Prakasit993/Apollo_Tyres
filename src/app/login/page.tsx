@@ -30,6 +30,16 @@ export default function LoginPage() {
   }, [stateLogin, stateSignup, stateResend])
 
   const handleGoogleLogin = async () => {
+    // 1. Check for LINE in-app browser FIRST
+    if (isLineInApp()) {
+      const currentUrl = new URL(window.location.href);
+      if (!currentUrl.searchParams.has("openExternalBrowser")) {
+        currentUrl.searchParams.append("openExternalBrowser", "1");
+        window.location.href = currentUrl.toString();
+        return; // Stop here, let the page reload in external browser
+      }
+    }
+
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -56,14 +66,7 @@ export default function LoginPage() {
       return;
     }
 
-    // Check for LINE in-app browser
-    if (isLineInApp()) {
-      window.open(url, "_blank", "noopener,noreferrer");
-      alert("ถ้าเด้ง error ให้กด … ใน LINE แล้วเลือก 'เปิดในเบราว์เซอร์' ก่อนล็อกอิน Google");
-      return;
-    }
-
-    // Normal browser
+    // Normal browser or already external
     window.location.assign(url);
   }
 
