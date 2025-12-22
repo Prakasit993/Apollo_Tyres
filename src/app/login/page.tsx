@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useEffect } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
+import { isLineInApp } from "@/lib/isLineInApp";
 import { Button } from "@/components/ui/button"
 import { login, signup, resendConfirmation } from "./actions"
 import Turnstile from 'react-turnstile'
@@ -34,12 +35,36 @@ export default function LoginPage() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
+    const redirectTo = `${window.location.origin}/auth/callback`;
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo,
+        skipBrowserRedirect: true,
       },
-    })
+    });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    const url = data?.url;
+    if (!url) {
+      alert("Missing OAuth URL");
+      return;
+    }
+
+    // Check for LINE in-app browser
+    if (isLineInApp()) {
+      window.open(url, "_blank", "noopener,noreferrer");
+      alert("ถ้าเด้ง error ให้กด … ใน LINE แล้วเลือก 'เปิดในเบราว์เซอร์' ก่อนล็อกอิน Google");
+      return;
+    }
+
+    // Normal browser
+    window.location.assign(url);
   }
 
   return (
@@ -70,7 +95,16 @@ export default function LoginPage() {
               <p className="mt-2 text-sm text-gray-400">Access your order history and profile</p>
             </div>
 
-            <form action={loginAction} className="space-y-6">
+            <form
+              action={loginAction}
+              className="space-y-6"
+              onSubmit={(e) => {
+                if (!captchaToken) {
+                  e.preventDefault()
+                  alert('กรุณายืนยันตัวตน (Captcha) ด้านล่างก่อนเข้าสู่ระบบ')
+                }
+              }}
+            >
               <div className="space-y-4">
                 <div>
                   <label htmlFor="email-login" className="sr-only">Email address</label>
@@ -124,7 +158,7 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <Button type="submit" disabled={isPendingLogin || !captchaToken} className="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold h-10 disabled:opacity-50">
+              <Button type="submit" disabled={isPendingLogin} className="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold h-10 disabled:opacity-50">
                 {isPendingLogin ? 'Signing in...' : 'Sign in'}
               </Button>
             </form>
@@ -181,7 +215,16 @@ export default function LoginPage() {
                 </Button>
               </div>
             ) : (
-              <form action={signupAction} className="space-y-6">
+              <form
+                action={signupAction}
+                className="space-y-6"
+                onSubmit={(e) => {
+                  if (!captchaToken) {
+                    e.preventDefault()
+                    alert('กรุณายืนยันตัวตน (Captcha) ด้านล่างก่อนสร้างบัญชี')
+                  }
+                }}
+              >
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="email-register" className="sr-only">Email address</label>
@@ -227,7 +270,7 @@ export default function LoginPage() {
 
                 <Button
                   type="submit"
-                  disabled={isPendingSignup || !captchaToken}
+                  disabled={isPendingSignup}
                   className="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold h-10 disabled:opacity-50"
                 >
                   {isPendingSignup ? 'Creating Account...' : 'Create Account'}

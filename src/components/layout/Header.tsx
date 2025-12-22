@@ -63,8 +63,12 @@ export async function Header() {
 
                     {user && <CartButton />}
 
-                    <Button variant="ghost" size="icon" className="md:hidden">
-                        <Menu className="h-5 w-5" />
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="md:hidden h-10 w-10 rounded-full text-white hover:bg-white/10 focus-visible:ring-0"
+                    >
+                        <Menu className="h-6 w-6" />
                         <span className="sr-only">Menu</span>
                     </Button>
                 </div>
