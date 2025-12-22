@@ -14,6 +14,8 @@ export interface ContactSettings {
     mapUrl: string
     hoursWeekdays: string
     hoursWeekend: string
+    hoursLabel1: string
+    hoursLabel2: string
 }
 
 export async function getContactSettings(): Promise<ContactSettings> {
@@ -35,7 +37,9 @@ export async function getContactSettings(): Promise<ContactSettings> {
         line: settings.contact_line || '',
         mapUrl: settings.contact_map_url || '',
         hoursWeekdays: settings.contact_hours_weekdays || '',
-        hoursWeekend: settings.contact_hours_weekend || ''
+        hoursWeekend: settings.contact_hours_weekend || '',
+        hoursLabel1: settings.contact_hours_label_1 || 'Mon - Sat',
+        hoursLabel2: settings.contact_hours_label_2 || 'Sunday'
     }
 }
 
@@ -60,6 +64,8 @@ export async function saveContactSettings(prevState: any, formData: FormData) {
         { key: 'contact_map_url', value: formData.get('mapUrl') as string },
         { key: 'contact_hours_weekdays', value: formData.get('hoursWeekdays') as string },
         { key: 'contact_hours_weekend', value: formData.get('hoursWeekend') as string },
+        { key: 'contact_hours_label_1', value: formData.get('hoursLabel1') as string },
+        { key: 'contact_hours_label_2', value: formData.get('hoursLabel2') as string },
     ]
 
     try {

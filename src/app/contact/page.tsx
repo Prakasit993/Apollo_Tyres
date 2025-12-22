@@ -58,11 +58,11 @@ export default async function ContactPage() {
                                 </h3>
                                 <div className="text-sm text-gray-600 space-y-1">
                                     <div className="flex justify-between">
-                                        <span>Mon - Sat:</span>
+                                        <span>{settings.hoursLabel1 || "Mon - Sat"}:</span>
                                         <span className="font-bold">{settings.hoursWeekdays || "08:30 - 18:00"}</span>
                                     </div>
                                     <div className="flex justify-between text-red-500">
-                                        <span>Sunday:</span>
+                                        <span>{settings.hoursLabel2 || "Sunday"}:</span>
                                         <span className="font-bold">{settings.hoursWeekend || "Closed"}</span>
                                     </div>
                                 </div>

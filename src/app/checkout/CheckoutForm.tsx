@@ -348,7 +348,12 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                 name="paymentMethodUI"
                                 className="grid gap-4"
                             >
-                                <div className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "transfer_bank" ? "border-gold-500 bg-gold-50/10" : "border-muted")}>
+                                <div
+                                    className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "transfer_bank" ? "border-gold-500 bg-gold-50/10" : "border-muted")}
+                                    onClick={() => {
+                                        if (paymentMethod === "transfer_bank") setShowBankModal(true)
+                                    }}
+                                >
                                     <RadioGroupItem value="transfer_bank" id="transfer_bank" className="peer sr-only" />
                                     <Label
                                         htmlFor="transfer_bank"
@@ -364,7 +369,12 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                     </Label>
                                 </div>
 
-                                <div className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "transfer_qr" ? "border-gold-500 bg-gold-50/10" : "border-muted")}>
+                                <div
+                                    className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "transfer_qr" ? "border-gold-500 bg-gold-50/10" : "border-muted")}
+                                    onClick={() => {
+                                        if (paymentMethod === "transfer_qr") setShowQrModal(true)
+                                    }}
+                                >
                                     <RadioGroupItem value="transfer_qr" id="transfer_qr" className="peer sr-only" />
                                     <Label
                                         htmlFor="transfer_qr"

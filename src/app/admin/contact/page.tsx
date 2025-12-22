@@ -52,13 +52,24 @@ export default function AdminContactPage() {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="mapUrl">Google Maps Embed URL (src="..." only)</Label>
-                        <Input
+                        <Textarea
                             id="mapUrl"
                             name="mapUrl"
                             defaultValue={settings.mapUrl}
                             placeholder="https://www.google.com/maps/embed?..."
+                            className="min-h-[100px] font-mono text-xs"
                             onChange={(e) => {
-                                const val = e.target.value;
+                                let val = e.target.value;
+
+                                // Auto-extract src from iframe tag if pasted
+                                if (val.includes('<iframe') && val.includes('src="')) {
+                                    const srcMatch = val.match(/src="([^"]+)"/);
+                                    if (srcMatch && srcMatch[1]) {
+                                        val = srcMatch[1];
+                                        e.target.value = val;
+                                    }
+                                }
+
                                 const warningEl = document.getElementById('map-warning');
                                 if (warningEl) {
                                     if (val && !val.includes('google.com/maps/embed')) {
@@ -94,14 +105,26 @@ export default function AdminContactPage() {
 
                 <div className="space-y-4">
                     <h3 className="font-bold text-lg border-b pb-2">Opening Hours</h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="hoursWeekdays">Mon - Sat</Label>
-                            <Input id="hoursWeekdays" name="hoursWeekdays" defaultValue={settings.hoursWeekdays} placeholder="08:30 - 18:00" />
+                    <div className="space-y-4">
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="hoursLabel1">Label 1 (e.g., Mon - Sat)</Label>
+                                <Input id="hoursLabel1" name="hoursLabel1" defaultValue={settings.hoursLabel1} placeholder="Mon - Sat" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="hoursWeekdays">Time 1</Label>
+                                <Input id="hoursWeekdays" name="hoursWeekdays" defaultValue={settings.hoursWeekdays} placeholder="08:30 - 18:00" />
+                            </div>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="hoursWeekend">Sunday</Label>
-                            <Input id="hoursWeekend" name="hoursWeekend" defaultValue={settings.hoursWeekend} placeholder="Closed" />
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="hoursLabel2">Label 2 (e.g., Sunday)</Label>
+                                <Input id="hoursLabel2" name="hoursLabel2" defaultValue={settings.hoursLabel2} placeholder="Sunday" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="hoursWeekend">Time 2</Label>
+                                <Input id="hoursWeekend" name="hoursWeekend" defaultValue={settings.hoursWeekend} placeholder="Closed" />
+                            </div>
                         </div>
                     </div>
                 </div>
