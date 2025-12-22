@@ -24,16 +24,16 @@ export async function Header() {
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
                     <Link href="/" className="transition-colors hover:text-blue-400 text-gray-300 hover:text-white">
-                        HOME
+                        หน้าแรก
                     </Link>
                     <Link href="/products" className="transition-colors hover:text-blue-400 text-gray-300 hover:text-white">
-                        SHOP TIRES
+                        เลือกยาง
                     </Link>
                     <Link href="/warranty" className="transition-colors hover:text-blue-400 text-gray-300 hover:text-white">
-                        WARRANTY
+                        การรับประกัน
                     </Link>
                     <Link href="/contact" className="transition-colors hover:text-blue-400 text-gray-300 hover:text-white">
-                        CONTACT
+                        ติดต่อเรา
                     </Link>
                 </nav>
 
@@ -44,19 +44,19 @@ export async function Header() {
                             <Link href="/account">
                                 <Button variant="ghost" size="sm" className="gap-2">
                                     <User className="h-4 w-4" />
-                                    <span className="hidden sm:inline">Account</span>
+                                    <span className="hidden sm:inline">บัญชีผู้ใช้</span>
                                 </Button>
                             </Link>
                             <form action={signout}>
                                 <Button variant="ghost" size="sm" type="submit" className="text-red-500 hover:text-red-600 hover:bg-red-50">
-                                    Sign Out
+                                    ออกจากระบบ
                                 </Button>
                             </form>
                         </div>
                     ) : (
                         <Link href="/login">
                             <Button variant="ghost" size="sm" className="font-bold">
-                                LOGIN
+                                เข้าสู่ระบบ
                             </Button>
                         </Link>
                     )}

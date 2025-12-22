@@ -141,8 +141,8 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
     if (items.length === 0) {
         return (
             <div className="text-center py-10">
-                <h2 className="text-xl font-bold">Your cart is empty</h2>
-                <p className="text-muted-foreground">Go add some tires first!</p>
+                <h2 className="text-xl font-bold text-gray-100">ตะกร้าสินค้าว่างเปล่า</h2>
+                <p className="text-muted-foreground">ไปเลือกซื้อยางก่อนเลย!</p>
             </div>
         )
     }
@@ -158,20 +158,20 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
-        alert("Copied to clipboard!")
+        alert("คัดลอกเรียบร้อยแล้ว!")
     }
 
     return (
         <>
-            <Modal isOpen={showBankModal} onClose={() => setShowBankModal(false)} title="Bank Transfer Details">
+            <Modal isOpen={showBankModal} onClose={() => setShowBankModal(false)} title="รายละเอียดการโอนเงิน (Bank Transfer)">
                 <div className="space-y-4">
                     <div className="bg-gray-50 p-4 rounded-lg space-y-3 border">
                         <div>
-                            <p className="text-xs text-muted-foreground uppercase">Bank Name</p>
-                            <p className="font-bold text-lg">{bankDetails.bankName || '-'}</p>
+                            <p className="text-xs text-muted-foreground uppercase">ธนาคาร (Bank Name)</p>
+                            <p className="font-bold text-lg text-gray-900">{bankDetails.bankName || '-'}</p>
                         </div>
                         <div>
-                            <p className="text-xs text-muted-foreground uppercase">Account Number</p>
+                            <p className="text-xs text-muted-foreground uppercase">เลขบัญชี (Account Number)</p>
                             <div className="flex items-center gap-2">
                                 <p className="font-mono font-bold text-xl tracking-wider text-blue-600">{bankDetails.accountNumber || '-'}</p>
                                 {bankDetails.accountNumber && (
@@ -182,19 +182,19 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                             </div>
                         </div>
                         <div>
-                            <p className="text-xs text-muted-foreground uppercase">Account Name</p>
-                            <p className="font-medium">{bankDetails.accountName || '-'}</p>
+                            <p className="text-xs text-muted-foreground uppercase">ชื่อบัญชี (Account Name)</p>
+                            <p className="font-medium text-gray-900">{bankDetails.accountName || '-'}</p>
                         </div>
                     </div>
                     <div className="text-center">
-                        <Button onClick={() => setShowBankModal(false)} className="w-full">
-                            Close
+                        <Button onClick={() => setShowBankModal(false)} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                            ปิด (Close)
                         </Button>
                     </div>
                 </div>
             </Modal>
 
-            <Modal isOpen={showQrModal} onClose={() => setShowQrModal(false)} title="Scan QR Code">
+            <Modal isOpen={showQrModal} onClose={() => setShowQrModal(false)} title="สแกน QR Code">
                 <div className="space-y-4 flex flex-col items-center">
                     {qrCodeUrl ? (
                         <div className="relative w-64 h-64 bg-white rounded-lg p-2 border shadow-sm">
@@ -202,14 +202,14 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                         </div>
                     ) : (
                         <div className="w-64 h-64 bg-gray-100 flex items-center justify-center rounded-lg text-gray-400">
-                            No QR Code Available
+                            ไม่พบ QR Code
                         </div>
                     )}
                     <p className="text-sm text-center text-muted-foreground">
-                        Scan with your banking app to pay
+                        สแกนด้วยแอพธนาคารเพื่อชำระเงิน
                     </p>
-                    <Button onClick={() => setShowQrModal(false)} className="w-full">
-                        Close
+                    <Button onClick={() => setShowQrModal(false)} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                        ปิด (Close)
                     </Button>
                 </div>
             </Modal>
@@ -220,22 +220,22 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                     <div className="space-y-6">
                         <div className="bg-white p-6 rounded-lg border border-border/40 shadow-sm">
                             <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-xl font-heading font-bold flex items-center gap-2">
-                                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gold-500 text-black text-sm">1</span>
-                                    Shipping Details
+                                <h2 className="text-xl font-heading font-bold flex items-center gap-2 text-gray-900">
+                                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">1</span>
+                                    ข้อมูลการจัดส่ง
                                 </h2>
                                 {!isEditing && (
-                                    <Button type="button" variant="link" onClick={() => setIsEditing(true)} className="text-gold-600 font-bold">
-                                        Edit
+                                    <Button type="button" variant="link" onClick={() => setIsEditing(true)} className="text-blue-600 font-bold">
+                                        แก้ไข
                                     </Button>
                                 )}
                             </div>
 
                             {!isEditing ? (
                                 <div className="space-y-3 text-sm text-gray-700">
-                                    <p><span className="font-semibold text-gray-900 block">Name:</span> {formValues.fullName || '-'}</p>
-                                    <p><span className="font-semibold text-gray-900 block">Phone:</span> {formValues.phone || '-'}</p>
-                                    <p><span className="font-semibold text-gray-900 block">Address:</span> {displayAddress || '-'}</p>
+                                    <p><span className="font-semibold text-gray-900 block">ชื่อ-นามสกุล:</span> {formValues.fullName || '-'}</p>
+                                    <p><span className="font-semibold text-gray-900 block">เบอร์โทรศัพท์:</span> {formValues.phone || '-'}</p>
+                                    <p><span className="font-semibold text-gray-900 block">ที่อยู่:</span> {displayAddress || '-'}</p>
 
                                     {/* Hidden inputs to ensure placeOrder gets granular data */}
                                     {Object.entries(formValues).map(([key, value]) => (
@@ -243,21 +243,22 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                     ))}
                                 </div>
                             ) : (
-                                <div className="space-y-4">
+                                <div className="space-y-4 text-gray-900">
                                     <div className="space-y-2">
-                                        <Label htmlFor="fullName">Full Name</Label>
+                                        <Label htmlFor="fullName" className="text-gray-900">ชื่อ-นามสกุล</Label>
                                         <Input
                                             id="fullName"
                                             name="fullName"
                                             value={formValues.fullName}
                                             onChange={handleInputChange}
-                                            placeholder="Enter your full name"
+                                            placeholder="กรอกชื่อ-นามสกุล"
                                             required
+                                            className="bg-white text-gray-900 border-gray-300"
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="phone">Phone Number</Label>
+                                        <Label htmlFor="phone" className="text-gray-900">เบอร์โทรศัพท์</Label>
                                         <Input
                                             id="phone"
                                             name="phone"
@@ -265,82 +266,87 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                             onChange={handleInputChange}
                                             placeholder="08X-XXX-XXXX"
                                             required
+                                            className="bg-white text-gray-900 border-gray-300"
                                         />
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="address">Address (House No / Street)</Label>
+                                        <Label htmlFor="address" className="text-gray-900">ที่อยู่ (บ้านเลขที่ / ถนน / ซอย)</Label>
                                         <Textarea
                                             id="address"
                                             name="address"
                                             value={formValues.address}
                                             onChange={handleInputChange}
-                                            placeholder="123/45 ..."
+                                            placeholder="123/45 หมู่บ้าน..."
                                             required
-                                            className="min-h-[80px]"
+                                            className="min-h-[80px] bg-white text-gray-900 border-gray-300"
                                         />
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="district">District (ตำบล)</Label>
+                                            <Label htmlFor="district" className="text-gray-900">แขวง / ตำบล</Label>
                                             <Input
                                                 id="district"
                                                 name="district"
                                                 value={formValues.district}
                                                 onChange={handleInputChange}
                                                 required
+                                                className="bg-white text-gray-900 border-gray-300"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="amphoe">Amphoe (อำเภอ)</Label>
+                                            <Label htmlFor="amphoe" className="text-gray-900">เขต / อำเภอ</Label>
                                             <Input
                                                 id="amphoe"
                                                 name="amphoe"
                                                 value={formValues.amphoe}
                                                 onChange={handleInputChange}
                                                 required
+                                                className="bg-white text-gray-900 border-gray-300"
                                             />
                                         </div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="province">Province (จังหวัด)</Label>
+                                            <Label htmlFor="province" className="text-gray-900">จังหวัด</Label>
                                             <Input
                                                 id="province"
                                                 name="province"
                                                 value={formValues.province}
                                                 onChange={handleInputChange}
                                                 required
+                                                className="bg-white text-gray-900 border-gray-300"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="zipcode">Zipcode</Label>
+                                            <Label htmlFor="zipcode" className="text-gray-900">รหัสไปรษณีย์</Label>
                                             <Input
                                                 id="zipcode"
                                                 name="zipcode"
                                                 value={formValues.zipcode}
                                                 onChange={handleInputChange}
                                                 required
+                                                className="bg-white text-gray-900 border-gray-300"
                                             />
                                         </div>
                                     </div>
 
                                     <div className="flex justify-end gap-2">
-                                        <Button type="button" variant="ghost" size="sm" onClick={() => setIsEditing(false)}>Cancel</Button>
-                                        <Button type="button" variant="default" size="sm" onClick={handleSaveDetails} className="bg-gold-500 text-black hover:bg-gold-600" disabled={isLoading}>
-                                            {isLoading ? 'Saving...' : 'Save'}
+                                        <Button type="button" variant="ghost" size="sm" onClick={() => setIsEditing(false)} className="text-gray-600">ยกเลิก</Button>
+                                        <Button type="button" variant="default" size="sm" onClick={handleSaveDetails} className="bg-blue-600 text-white hover:bg-blue-700 font-bold" disabled={isLoading}>
+                                            {isLoading ? 'กำลังบันทึก...' : 'บันทึก'}
                                         </Button>
                                     </div>
                                 </div>
                             )}
                         </div>
 
-                        <div className="bg-white p-6 rounded-lg border border-border/40 shadow-sm">
-                            <h2 className="text-xl font-heading font-bold mb-4 flex items-center gap-2">
-                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gold-500 text-black text-sm">2</span>
-                                Payment Method
+                        <div className="bg-white p-6 rounded-lg border border-border/40 shadow-sm text-gray-900">
+                            <h2 className="text-xl font-heading font-bold mb-4 flex items-center gap-2 text-gray-900">
+                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">2</span>
+                                วิธีการชำระเงิน
                             </h2>
                             <RadioGroup
                                 value={paymentMethod}
@@ -349,7 +355,7 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                 className="grid gap-4"
                             >
                                 <div
-                                    className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "transfer_bank" ? "border-gold-500 bg-gold-50/10" : "border-muted")}
+                                    className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent cursor-pointer", paymentMethod === "transfer_bank" ? "border-blue-500 bg-blue-50/20" : "border-gray-200")}
                                     onClick={() => {
                                         if (paymentMethod === "transfer_bank") setShowBankModal(true)
                                     }}
@@ -359,18 +365,18 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                         htmlFor="transfer_bank"
                                         className="flex flex-row items-center gap-4 cursor-pointer"
                                     >
-                                        <div className="h-10 w-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
+                                        <div className="h-10 w-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
                                             <Building2 className="h-5 w-5" />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="font-bold">Bank Transfer</span>
-                                            <span className="text-sm text-muted-foreground">Show Bank Account Details</span>
+                                            <span className="font-bold text-gray-900">โอนเงินผ่านธนาคาร (Bank Transfer)</span>
+                                            <span className="text-sm text-gray-500">ดูเลขบัญชีธนาคาร</span>
                                         </div>
                                     </Label>
                                 </div>
 
                                 <div
-                                    className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "transfer_qr" ? "border-gold-500 bg-gold-50/10" : "border-muted")}
+                                    className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent cursor-pointer", paymentMethod === "transfer_qr" ? "border-blue-500 bg-blue-50/20" : "border-gray-200")}
                                     onClick={() => {
                                         if (paymentMethod === "transfer_qr") setShowQrModal(true)
                                     }}
@@ -380,12 +386,12 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                         htmlFor="transfer_qr"
                                         className="flex flex-row items-center gap-4 cursor-pointer"
                                     >
-                                        <div className="h-10 w-10 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center">
+                                        <div className="h-10 w-10 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                                             <QrCode className="h-5 w-5" />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="font-bold">Scan QR Code</span>
-                                            <span className="text-sm text-muted-foreground">PromptPay / Mobile Banking</span>
+                                            <span className="font-bold text-gray-900">สแกน QR Code</span>
+                                            <span className="text-sm text-gray-500">พร้อมเพย์ / โมบายแบงค์กิ้ง</span>
                                         </div>
                                     </Label>
                                 </div>
@@ -393,13 +399,13 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                 {(paymentMethod === "transfer_bank" || paymentMethod === "transfer_qr") && (
                                     <div className="mt-2 pt-4 px-2 border-t border-dashed animate-in fade-in slide-in-from-top-2">
                                         <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-md mb-4 text-sm text-yellow-800">
-                                            Please <strong>{paymentMethod === 'transfer_bank' ? 'transfer manually' : 'scan the QR code'}</strong> using the details provided in the popup, then upload your slip below.
-                                            <Button type="button" variant="link" className="text-blue-600 h-auto p-0 ml-1" onClick={() => paymentMethod === 'transfer_bank' ? setShowBankModal(true) : setShowQrModal(true)}>
-                                                View Details Again
+                                            กรุณา <strong>{paymentMethod === 'transfer_bank' ? 'โอนเงิน' : 'สแกน QR Code'}</strong> ตามรายละเอียดที่แจ้ง แล้วแนบสลิปด้านล่าง
+                                            <Button type="button" variant="link" className="text-blue-600 h-auto p-0 ml-1 font-bold" onClick={() => paymentMethod === 'transfer_bank' ? setShowBankModal(true) : setShowQrModal(true)}>
+                                                (ดูรายละเอียดอีกครั้ง)
                                             </Button>
                                         </div>
                                         <div className="space-y-3">
-                                            <Label htmlFor="slip" className="text-sm font-bold text-red-600">Upload Payment Slip *</Label>
+                                            <Label htmlFor="slip" className="text-sm font-bold text-red-600">แนบหลักฐานการโอนเงิน (สลิป) *</Label>
 
                                             <div className="flex items-center gap-4">
                                                 <div className="relative">
@@ -422,45 +428,45 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                                                         type="button"
                                                         variant="outline"
                                                         onClick={() => document.getElementById('slip')?.click()}
-                                                        className="bg-white border-2 border-dashed border-gray-300 hover:border-gold-500 hover:bg-gold-50 text-gray-600 hover:text-gold-700 w-full sm:w-auto"
+                                                        className="bg-white border-2 border-dashed border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-600 hover:text-blue-700 w-full sm:w-auto"
                                                     >
                                                         <div className="flex items-center gap-2">
                                                             <Upload className="h-4 w-4" />
-                                                            {slipFileName ? 'Change File' : 'Choose File'}
+                                                            {slipFileName ? 'เปลี่ยนไฟล์' : 'เลือกไฟล์'}
                                                         </div>
                                                     </Button>
                                                 </div>
                                                 <span className="text-sm text-gray-500 italic truncate max-w-[200px]">
-                                                    {slipFileName || 'No file chosen'}
+                                                    {slipFileName || 'ยังไม่ได้เลือกไฟล์'}
                                                 </span>
                                             </div>
 
-                                            <p className="text-xs text-muted-foreground">Supported formats: JPG, PNG. Max size: 5MB.</p>
+                                            <p className="text-xs text-muted-foreground">รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 5MB</p>
                                         </div>
                                     </div>
                                 )}
 
-                                <div className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent", paymentMethod === "cash" ? "border-gold-500 bg-gold-50/10" : "border-muted")}>
+                                <div className={cn("relative rounded-lg border-2 p-4 transition-all hover:bg-accent cursor-pointer", paymentMethod === "cash" ? "border-blue-500 bg-blue-50/20" : "border-gray-200")}>
                                     <RadioGroupItem value="cash" id="cash" className="peer sr-only" />
                                     <Label
                                         htmlFor="cash"
                                         className="flex flex-col items-center justify-between cursor-pointer"
                                     >
-                                        <span className="font-bold">Cash on Delivery (COD)</span>
-                                        <span className="text-sm text-muted-foreground">Pay when you receive items</span>
+                                        <span className="font-bold text-gray-900">เก็บเงินปลายทาง (COD)</span>
+                                        <span className="text-sm text-muted-foreground">ชำระเงินเมื่อได้รับสินค้า</span>
                                     </Label>
                                 </div>
                             </RadioGroup>
                         </div>
 
                         {/* Remarks / Important Notes - Using HTML from Editor */}
-                        <div className="bg-white p-6 rounded-lg border border-border/40 shadow-sm border-l-4 border-l-gold-500">
-                            <h2 className="text-xl font-heading font-bold mb-4 flex items-center gap-2">
+                        <div className="bg-white p-6 rounded-lg border border-border/40 shadow-sm border-l-4 border-l-blue-500 text-gray-900">
+                            <h2 className="text-xl font-heading font-bold mb-4 flex items-center gap-2 text-charcoal-900">
                                 หมายเหตุ**
                             </h2>
                             <div
                                 dangerouslySetInnerHTML={{ __html: remarks }}
-                                className="prose prose-sm prose-gray max-w-none prose-headings:font-bold prose-headings:text-inherit prose-a:text-blue-600 hover:prose-a:underline whitespace-pre-line"
+                                className="prose prose-sm prose-gray max-w-none prose-headings:font-bold prose-headings:text-gray-900 text-gray-900 prose-a:text-blue-600 hover:prose-a:underline whitespace-pre-line"
                             />
                         </div>
                     </div>
@@ -468,18 +474,18 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                     {/* Right Column: Order Summary */}
                     <div className="space-y-6">
                         <div className="bg-white p-6 rounded-lg border border-border/40 shadow-sm sticky top-24">
-                            <h2 className="text-xl font-heading font-bold mb-4">Order Summary</h2>
+                            <h2 className="text-xl font-heading font-bold mb-4 text-charcoal-900">สรุปคำสั่งซื้อ (Order Summary)</h2>
 
                             <div className="space-y-4 mb-6">
                                 {items.map((item) => (
-                                    <div key={item.id} className="flex justify-between text-sm">
+                                    <div key={item.id} className="flex justify-between text-sm text-gray-900">
                                         <span>{item.quantity} x {item.brand} {item.model}</span>
-                                        <span className="font-mono">฿{(item.price * item.quantity).toLocaleString()}</span>
+                                        <span className="font-mono text-gray-900">฿{(item.price * item.quantity).toLocaleString()}</span>
                                     </div>
                                 ))}
-                                <div className="border-t border-dashed my-2" />
-                                <div className="flex justify-between font-bold text-lg text-gold-600">
-                                    <span>Total</span>
+                                <div className="border-t border-dashed my-2 border-gray-300" />
+                                <div className="flex justify-between font-bold text-lg text-blue-600">
+                                    <span>ยอดรวม (Total)</span>
                                     <span>฿{total.toLocaleString()}</span>
                                 </div>
                             </div>
@@ -494,25 +500,25 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
 
                             <Button
                                 type="submit"
-                                className="w-full bg-gold-500 hover:bg-gold-600 text-black font-bold h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled={isLoading || !formValues.address || !formValues.phone || !formValues.fullName}
                             >
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Processing...
+                                        กำลังดำเนินการ...
                                     </>
                                 ) : (
-                                    "CONFIRM ORDER"
+                                    "ยืนยันการสั่งซื้อ (CONFIRM ORDER)"
                                 )}
                             </Button>
                             {(!formValues.address || !formValues.phone || !formValues.fullName) && (
                                 <p className="text-sm text-red-500 text-center mt-2 font-medium">
-                                    Please complete your shipping details above to proceed.
+                                    กรุณากรอกข้อมูลการจัดส่งให้ครบถ้วนก่อนยืนยัน
                                 </p>
                             )}
                             <p className="text-xs text-center text-muted-foreground mt-4">
-                                By placing an order, you agree to our Terms of Service.
+                                การกดสั่งซื้อถือว่าคุณยอมรับเงื่อนไขการให้บริการของเรา
                             </p>
                         </div>
                     </div>

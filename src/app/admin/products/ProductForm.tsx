@@ -50,7 +50,7 @@ export function ProductForm({ product }: ProductFormProps) {
 
             setImageUrl(data.publicUrl)
         } catch (error: any) {
-            alert('Error uploading image: ' + error.message)
+            alert('เกิดข้อผิดพลาดในการอัปโหลดรูป: ' + error.message)
         } finally {
             setUploading(false)
         }
@@ -84,7 +84,7 @@ export function ProductForm({ product }: ProductFormProps) {
 
             setGallery(prev => [...prev, ...newUrls])
         } catch (error: any) {
-            alert('Error uploading gallery images: ' + error.message)
+            alert('เกิดข้อผิดพลาดในการอัปโหลดรูปแกลเลอรี: ' + error.message)
         } finally {
             setUploading(false)
         }
@@ -108,7 +108,7 @@ export function ProductForm({ product }: ProductFormProps) {
             if (result?.success) {
                 router.push('/admin/products')
             } else {
-                alert(result?.message || "Failed to save")
+                alert(result?.message || "บันทึกไม่สำเร็จ")
             }
         })
     }
@@ -118,54 +118,54 @@ export function ProductForm({ product }: ProductFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Brand & Model */}
                 <div className="space-y-2">
-                    <Label htmlFor="brand">Brand</Label>
-                    <Input id="brand" name="brand" defaultValue={product?.brand} required placeholder="e.g. Apollo" />
+                    <Label htmlFor="brand" className="text-charcoal-900">ยี่ห้อ (Brand)</Label>
+                    <Input id="brand" name="brand" defaultValue={product?.brand} required placeholder="เช่น Apollo" className="bg-white text-gray-900 border-gray-300" />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="model">Model</Label>
-                    <Input id="model" name="model" defaultValue={product?.model} required placeholder="e.g. Alnac 4G" />
+                    <Label htmlFor="model" className="text-charcoal-900">รุ่น (Model)</Label>
+                    <Input id="model" name="model" defaultValue={product?.model} required placeholder="เช่น Alnac 4G" className="bg-white text-gray-900 border-gray-300" />
                 </div>
 
                 {/* Slug (Seo) */}
                 <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="slug">URL Slug (SEO)</Label>
-                    <Input id="slug" name="slug" defaultValue={product?.slug} placeholder="Auto-generated e.g. apollo-alnac-4g-195-55-15" />
-                    <p className="text-xs text-gray-500">Leave blank to auto-generate. Must be unique.</p>
+                    <Label htmlFor="slug" className="text-charcoal-900">URL Slug (สำหรับ SEO)</Label>
+                    <Input id="slug" name="slug" defaultValue={product?.slug} placeholder="สร้างอัตโนมัติ เช่น apollo-alnac-4g-195-55-15" className="bg-white text-gray-900 border-gray-300" />
+                    <p className="text-xs text-gray-500">เว้นว่างไว้เพื่อสร้างอัตโนมัติ (ต้องไม่ซ้ำกัน)</p>
                 </div>
 
                 {/* Specs */}
                 <div className="space-y-2">
-                    <Label htmlFor="width">Width (mm)</Label>
-                    <Input id="width" name="width" type="number" defaultValue={product?.width} required placeholder="e.g. 195" />
+                    <Label htmlFor="width" className="text-charcoal-900">หน้ายาง (มม.)</Label>
+                    <Input id="width" name="width" type="number" defaultValue={product?.width} required placeholder="เช่น 195" className="bg-white text-gray-900 border-gray-300" />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="aspectRatio">Aspect Ratio (%)</Label>
-                    <Input id="aspectRatio" name="aspectRatio" type="number" defaultValue={product?.aspect_ratio} required placeholder="e.g. 55" />
+                    <Label htmlFor="aspectRatio" className="text-charcoal-900">แก้มยาง (%)</Label>
+                    <Input id="aspectRatio" name="aspectRatio" type="number" defaultValue={product?.aspect_ratio} required placeholder="เช่น 55" className="bg-white text-gray-900 border-gray-300" />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="rim">Rim (inch)</Label>
-                    <Input id="rim" name="rim" type="number" defaultValue={product?.rim} required placeholder="e.g. 15" />
+                    <Label htmlFor="rim" className="text-charcoal-900">ขอบล้อ (นิ้ว)</Label>
+                    <Input id="rim" name="rim" type="number" defaultValue={product?.rim} required placeholder="เช่น 15" className="bg-white text-gray-900 border-gray-300" />
                 </div>
 
                 {/* Price & Stock */}
                 <div className="space-y-2">
-                    <Label htmlFor="price">Price (THB)</Label>
-                    <Input id="price" name="price" type="number" step="0.01" defaultValue={product?.price} required placeholder="e.g. 2500" />
+                    <Label htmlFor="price" className="text-charcoal-900">ราคา (บาท)</Label>
+                    <Input id="price" name="price" type="number" step="0.01" defaultValue={product?.price} required placeholder="เช่น 2500" className="bg-white text-gray-900 border-gray-300" />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="stock">Stock Quantity</Label>
-                    <Input id="stock" name="stock" type="number" defaultValue={product?.stock || 0} required />
+                    <Label htmlFor="stock" className="text-charcoal-900">จำนวนสินค้าในสต็อก</Label>
+                    <Input id="stock" name="stock" type="number" defaultValue={product?.stock || 0} required className="bg-white text-gray-900 border-gray-300" />
                 </div>
 
                 {/* Description */}
                 <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="description">Product Description</Label>
+                    <Label htmlFor="description" className="text-charcoal-900">รายละเอียดสินค้า</Label>
                     <Textarea
                         id="description"
                         name="description"
                         defaultValue={product?.description}
-                        placeholder="Describe the product details, features, etc..."
-                        className="h-32"
+                        placeholder="อธิบายรายละเอียดสินค้า คุณสมบัติ ฯลฯ..."
+                        className="h-32 bg-white text-gray-900 border-gray-300"
                     />
                 </div>
             </div>
@@ -174,26 +174,26 @@ export function ProductForm({ product }: ProductFormProps) {
             <div className="space-y-6">
                 {/* Main Image */}
                 <div className="space-y-4">
-                    <Label className="text-base font-semibold">Main Product Image (Thumbnail)</Label>
-                    <div className="flex flex-col sm:flex-row items-start gap-4 p-4 border rounded-lg bg-gray-50 border-gray-100">
+                    <Label className="text-base font-semibold text-charcoal-900">รูปภาพหลัก (ปกสินค้า)</Label>
+                    <div className="flex flex-col sm:flex-row items-start gap-4 p-4 border rounded-lg bg-gray-50 border-gray-200">
                         <div className="relative w-40 h-40 bg-white rounded-md border border-gray-200 flex items-center justify-center overflow-hidden shadow-sm shrink-0">
                             {imageUrl ? (
                                 <Image src={imageUrl} alt="Main Preview" fill className="object-cover" />
                             ) : (
-                                <span className="text-gray-400 text-xs">No Main Image</span>
+                                <span className="text-gray-400 text-xs">ไม่มีรูปภาพ</span>
                             )}
                         </div>
                         <div className="flex-1 w-full">
-                            <Label htmlFor="main-image-upload" className="cursor-pointer inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 w-full sm:w-auto">
-                                <span>Choose Main Image</span>
+                            <Label htmlFor="main-image-upload" className="cursor-pointer inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full sm:w-auto">
+                                <span>เลือกรูปภาพหลัก</span>
                                 <input id="main-image-upload" type="file" onChange={handleImageUpload} disabled={uploading} accept="image/*" className="sr-only" />
                             </Label>
                             <p className="text-xs text-gray-500 mt-2">
-                                {uploading ? 'Uploading...' : 'Recommended size: 800x800px. Used heavily in listings.'}
+                                {uploading ? 'กำลังอัปโหลด...' : 'ขนาดแนะนำ: 800x800px ใช้สำหรับแสดงในหน้ารวมสินค้า'}
                             </p>
                             {imageUrl && (
                                 <Button type="button" variant="ghost" size="sm" className="mt-2 text-red-600 hover:text-red-700" onClick={() => setImageUrl("")}>
-                                    Remove Main Image
+                                    ลบรูปภาพหลัก
                                 </Button>
                             )}
                         </div>
@@ -203,11 +203,11 @@ export function ProductForm({ product }: ProductFormProps) {
                 {/* Gallery Images */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                        <Label className="text-base font-semibold">Additional Images (Gallery)</Label>
-                        <span className="text-xs text-gray-500">{gallery.length} images</span>
+                        <Label className="text-base font-semibold text-charcoal-900">รูปภาพเพิ่มเติม (แกลเลอรี)</Label>
+                        <span className="text-xs text-gray-500">{gallery.length} รูป</span>
                     </div>
 
-                    <div className="p-4 border rounded-lg bg-gray-50 border-gray-100 space-y-4">
+                    <div className="p-4 border rounded-lg bg-gray-50 border-gray-200 space-y-4">
                         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
                             {gallery.map((url, index) => (
                                 <div key={index} className="group relative aspect-square bg-white rounded-md border border-gray-200 overflow-hidden shadow-sm">
@@ -223,9 +223,9 @@ export function ProductForm({ product }: ProductFormProps) {
                                 </div>
                             ))}
 
-                            <label className="flex flex-col items-center justify-center aspect-square border-2 border-dashed border-gray-300 rounded-md hover:border-gold-500 hover:bg-gold-50/50 cursor-pointer transition-colors bg-white">
+                            <label className="flex flex-col items-center justify-center aspect-square border-2 border-dashed border-gray-300 rounded-md hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-colors bg-white">
                                 <Plus className="w-8 h-8 text-gray-400 mb-1" />
-                                <span className="text-xs text-gray-500 font-medium">Add Images</span>
+                                <span className="text-xs text-gray-500 font-medium">เพิ่มรูปภาพ</span>
                                 <input
                                     type="file"
                                     multiple
@@ -237,16 +237,16 @@ export function ProductForm({ product }: ProductFormProps) {
                             </label>
                         </div>
                         <p className="text-xs text-gray-500">
-                            {uploading ? 'Uploading...' : 'Upload multiple images to show different angles or details.'}
+                            {uploading ? 'กำลังอัปโหลด...' : 'อัปโหลดรูปภาพเพิ่มเติมเพื่อแสดงมุมมองต่างๆ หรือรายละเอียด'}
                         </p>
                     </div>
                 </div>
             </div>
 
             <div className="flex justify-end gap-4 pt-4 border-t border-gray-100">
-                <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-                <Button type="submit" className="bg-gold-500 text-charcoal-900 hover:bg-gold-600 font-bold" disabled={isPending || uploading}>
-                    {isPending ? 'Saving...' : (product ? 'Update Product' : 'Create Product')}
+                <Button type="button" variant="outline" onClick={() => router.back()}>ยกเลิก</Button>
+                <Button type="submit" className="bg-blue-600 text-white hover:bg-blue-700 font-bold" disabled={isPending || uploading}>
+                    {isPending ? 'กำลังบันทึก...' : (product ? 'บันทึกสินค้า' : 'เพิ่มสินค้า')}
                 </Button>
             </div>
         </form>

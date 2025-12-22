@@ -44,46 +44,46 @@ export default async function AdminLayout({
             {/* Sidebar */}
             <aside className="w-64 bg-charcoal-900 text-white shrink-0 hidden md:block">
                 <div className="p-6 border-b border-gray-800">
-                    <h2 className="text-xl font-heading font-bold text-gold-500">ADMIN PANEL</h2>
+                    <h2 className="text-xl font-heading font-bold text-gold-500">ระบบจัดการร้าน</h2>
                 </div>
                 <nav className="p-4 space-y-2">
                     <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <BarChart3 className="w-5 h-5" />
-                        Dashboard
+                        ภาพรวม
                     </Link>
                     <Link href="/admin/products" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <Package className="w-5 h-5" />
-                        Products
+                        สินค้า
                     </Link>
                     <Link href="/admin/orders" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <ShoppingCart className="w-5 h-5" />
-                        Orders
+                        คำสั่งซื้อ
                     </Link>
                     <Link href="/admin/finance" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <CreditCard className="w-5 h-5" />
-                        Finance
+                        การเงิน
                     </Link>
                     <Link href="/admin/finance/accounting" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <FileText className="w-5 h-5" />
-                        Accounting
+                        บัญชี
                     </Link>
                     <Link href="/admin/reviews" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <Star className="w-5 h-5" />
-                        Reviews
+                        รีวิวลูกค้า
                     </Link>
                     <Link href="/admin/contact" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <MapPin className="w-5 h-5" />
-                        Contact Info
+                        ข้อมูลร้าน
                     </Link>
                     <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>
-                        Settings
+                        ตั้งค่า
                     </Link>
                 </nav>
                 <div className="p-4 absolute bottom-0 w-64 border-t border-gray-800">
                     <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-charcoal-800 text-gray-300 hover:text-white transition-colors mb-2">
                         <Home className="w-5 h-5" />
-                        Storefront
+                        หน้าร้านสินค้า
                     </Link>
                 </div>
             </aside>

@@ -51,11 +51,11 @@ export function AddToCartButton({ product }: { product: any }) {
         >
             {isAdded ? (
                 <span className="flex items-center gap-3">
-                    <Check className="w-6 h-6" /> Added to Cart
+                    <Check className="w-6 h-6" /> เพิ่มเรียบร้อย
                 </span>
             ) : (
                 <span className="flex items-center gap-3">
-                    <ShoppingCart className="w-6 h-6" /> Add to Cart
+                    <ShoppingCart className="w-6 h-6" /> เพิ่มใส่ตะกร้า
                 </span>
             )}
         </Button>

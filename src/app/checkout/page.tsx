@@ -42,8 +42,8 @@ export default async function CheckoutPage() {
 
     return (
         <div className="container mx-auto px-4 py-12 max-w-5xl">
-            <h1 className="text-4xl font-black text-charcoal-900 mb-8 uppercase italic border-b-4 border-gold-500 inline-block">
-                Secure Checkout
+            <h1 className="text-4xl font-black text-white mb-8 uppercase italic border-b-4 border-blue-500 inline-block">
+                ชำระเงิน
             </h1>
 
             <CheckoutForm

@@ -84,7 +84,7 @@ export function ProductCard({ variants }: ProductCardProps) {
                 {/* Hot/Sale Badge */}
                 {selectedProduct.featured && (
                     <div className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1">
-                        HOT
+                        ขายดี
                     </div>
                 )}
             </Link>
@@ -110,7 +110,7 @@ export function ProductCard({ variants }: ProductCardProps) {
                 {hasMultipleVariants && (
                     <div className="mb-3">
                         <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1 block">
-                            Select Size
+                            เลือกขนาด
                         </label>
                         <Select
                             value={selectedProduct.id}
@@ -120,12 +120,12 @@ export function ProductCard({ variants }: ProductCardProps) {
                             }}
                         >
                             <SelectTrigger className="w-full h-8 text-xs font-medium bg-neutral-700 text-white border-neutral-600">
-                                <SelectValue placeholder="Select Size" />
+                                <SelectValue placeholder="เลือกขนาด" />
                             </SelectTrigger>
                             <SelectContent>
                                 {variants.map(v => (
                                     <SelectItem key={v.id} value={v.id} className="text-xs">
-                                        {v.width}/{v.aspect_ratio} R{v.rim} - {v.price.toLocaleString()} THB
+                                        {v.width}/{v.aspect_ratio} R{v.rim} - {v.price.toLocaleString()} บาท
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -137,10 +137,10 @@ export function ProductCard({ variants }: ProductCardProps) {
                 <div className="mt-auto flex items-end justify-between border-t border-neutral-700 pt-3">
                     <div>
                         <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">
-                            {hasMultipleVariants ? 'Starts at' : 'Per Unit'}
+                            {hasMultipleVariants ? 'เริ่มต้น' : 'ราคาต่อเส้น'}
                         </p>
                         <p className="text-xl font-black text-white">
-                            {selectedProduct.price.toLocaleString()} THB
+                            {selectedProduct.price.toLocaleString()} บาท
                         </p>
                     </div>
                 </div>
@@ -160,17 +160,17 @@ export function ProductCard({ variants }: ProductCardProps) {
                         >
                             {isAdded ? (
                                 <span className="flex items-center gap-2">
-                                    <Check className="w-4 h-4" /> ADDED
+                                    <Check className="w-4 h-4" /> เพิ่มแล้ว
                                 </span>
                             ) : (
                                 <span className="flex items-center gap-2">
-                                    <ShoppingCart className="w-4 h-4" /> ADD TO CART
+                                    <ShoppingCart className="w-4 h-4" /> เพิ่มใส่ตะกร้า
                                 </span>
                             )}
                         </Button>
                     ) : (
                         <div className="flex-1 h-9 flex items-center justify-center text-xs font-bold text-gray-600 uppercase bg-neutral-900 rounded-full cursor-not-allowed">
-                            Out of Stock
+                            สินค้าหมด
                         </div>
                     )}
                 </div>

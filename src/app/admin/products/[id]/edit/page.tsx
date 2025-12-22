@@ -19,7 +19,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
     return (
         <div className="max-w-3xl mx-auto">
-            <h1 className="text-2xl font-heading font-bold mb-6">Edit Product</h1>
+            <h1 className="text-2xl font-heading font-bold mb-6 text-charcoal-900">แก้ไขสินค้า</h1>
             <ProductForm product={product} />
         </div>
     )

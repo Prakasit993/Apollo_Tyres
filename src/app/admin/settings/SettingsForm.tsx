@@ -34,9 +34,9 @@ export function SettingsForm({
             const errors = results.filter(r => !r.success).map(r => r.message)
 
             if (errors.length === 0) {
-                alert("All settings saved!")
+                alert("บันทึกการตั้งค่าทั้งหมดเรียบร้อย!")
             } else {
-                alert(`Failed to save some settings:\n${errors.join('\n')}`)
+                alert(`เกิดข้อผิดพลาดในการบันทึก:\n${errors.join('\n')}`)
             }
         })
     }
@@ -46,46 +46,46 @@ export function SettingsForm({
             {/* Remarks Section */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="remarks" className="text-lg font-bold">Checkout Remarks (HTML Supported)</Label>
+                    <Label htmlFor="remarks" className="text-lg font-bold text-charcoal-900">หมายเหตุในหน้าชำระเงิน (รองรับ HTML)</Label>
                     <p className="text-sm text-gray-500">
-                        This text appears on the checkout page under "หมายเหตุ". Use HTML for formatting.
+                        ข้อความนี้จะแสดงในหน้าชำระเงินใต้หัวข้อ "หมายเหตุ". สามารถใช้ HTML ได้
                     </p>
                     <Textarea
                         id="remarks"
                         value={remarks}
                         onChange={(e) => setRemarks(e.target.value)}
-                        className="min-h-[200px] font-mono text-sm"
+                        className="min-h-[200px] font-mono text-sm bg-white text-gray-900 border-gray-300"
                     />
                 </div>
             </div>
 
             {/* Legal Pages Section */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
-                <h2 className="text-lg font-bold">Legal Pages Content</h2>
+                <h2 className="text-lg font-bold text-charcoal-900">เนื้อหาหน้ากฏหมาย</h2>
 
                 <div className="space-y-2">
-                    <Label htmlFor="privacy" className="font-semibold">Privacy Policy (HTML Supported)</Label>
+                    <Label htmlFor="privacy" className="font-semibold text-charcoal-900">นโยบายความเป็นส่วนตัว (รองรับ HTML)</Label>
                     <p className="text-sm text-gray-500">
-                        Content for /privacy page. Leave empty to use default.
+                        เนื้อหาสำหรับหน้า /privacy (เว้นว่างไว้เพื่อใช้ค่าเริ่มต้น)
                     </p>
                     <Textarea
                         id="privacy"
                         value={privacyContent}
                         onChange={(e) => setPrivacyContent(e.target.value)}
-                        className="min-h-[300px] font-mono text-sm"
+                        className="min-h-[300px] font-mono text-sm bg-white text-gray-900 border-gray-300"
                     />
                 </div>
 
-                <div className="space-y-2 pt-4 border-t">
-                    <Label htmlFor="terms" className="font-semibold">Terms of Service (HTML Supported)</Label>
+                <div className="space-y-2 pt-4 border-t border-gray-200">
+                    <Label htmlFor="terms" className="font-semibold text-charcoal-900">เงื่อนไขการให้บริการ (รองรับ HTML)</Label>
                     <p className="text-sm text-gray-500">
-                        Content for /terms page. Leave empty to use default.
+                        เนื้อหาสำหรับหน้า /terms (เว้นว่างไว้เพื่อใช้ค่าเริ่มต้น)
                     </p>
                     <Textarea
                         id="terms"
                         value={termsContent}
                         onChange={(e) => setTermsContent(e.target.value)}
-                        className="min-h-[300px] font-mono text-sm"
+                        className="min-h-[300px] font-mono text-sm bg-white text-gray-900 border-gray-300"
                     />
                 </div>
             </div>
@@ -93,10 +93,10 @@ export function SettingsForm({
             <div className="flex justify-end">
                 <Button
                     onClick={handleSave}
-                    className="bg-gold-500 text-black hover:bg-gold-600 font-bold"
+                    className="bg-blue-600 text-white hover:bg-blue-700 font-bold"
                     disabled={isPending}
                 >
-                    {isPending ? 'Saving...' : 'Save All Changes'}
+                    {isPending ? 'กำลังบันทึก...' : 'บันทึกทั้งหมด'}
                 </Button>
             </div>
         </div>

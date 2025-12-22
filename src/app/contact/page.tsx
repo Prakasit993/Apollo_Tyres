@@ -10,13 +10,13 @@ export default async function ContactPage() {
     return (
         <div className="bg-cream-50 min-h-screen pb-20">
             {/* Hero Section */}
-            <div className="bg-charcoal-900 text-white py-16 relative overflow-hidden">
-                <div className="container mx-auto px-4 relative z-10 text-center">
-                    <h1 className="font-heading text-4xl md:text-5xl font-black italic tracking-tighter text-gold-500 mb-4">
-                        CONTACT US
+            <div className="bg-charcoal-900 text-white py-16 relative overflow-hidden text-center">
+                <div className="container mx-auto px-4 relative z-10">
+                    <h1 className="font-heading text-4xl md:text-5xl font-black italic tracking-tighter text-blue-500 mb-4 uppercase">
+                        ติดต่อเรา
                     </h1>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                        We are here to help! Visit our shop or reach out for inquiries.
+                        เราพร้อมให้บริการคุณ! แวะมาที่ร้านหรือติดต่อสอบถามข้อมูลเพิ่มเติมได้เลย
                     </p>
                 </div>
             </div>
@@ -26,51 +26,51 @@ export default async function ContactPage() {
 
                     {/* Contact Info */}
                     <div className="space-y-8">
-                        <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-gold-500">
+                        <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-blue-500">
                             <h2 className="text-2xl font-black text-charcoal-900 mb-6 uppercase flex items-center gap-3">
-                                <MapPin className="text-gold-500" />
-                                Visit Our Shop
+                                <MapPin className="text-blue-500" />
+                                หน้าร้านของเรา
                             </h2>
-                            <address className="not-italic text-gray-600 mb-6 leading-relaxed whitespace-pre-wrap">
+                            <address className="not-italic text-gray-800 mb-6 leading-relaxed whitespace-pre-wrap font-medium">
                                 {settings.address || "123 Rama 9 Road, Suan Luang,\nBangkok 10250, Thailand"}
                             </address>
                             <a
                                 href={settings.mapUrl ? `https://www.google.com/maps?q=${settings.address}` : "https://maps.app.goo.gl/u8xZxi6XjyWpgm54A"}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-gold-600 font-bold hover:text-gold-700 hover:underline"
+                                className="inline-flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 hover:underline"
                             >
-                                Get Directions <MapPin size={16} />
+                                นำทาง <MapPin size={16} />
                             </a>
                         </div>
 
                         <div className="grid sm:grid-cols-2 gap-6">
                             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                                 <h3 className="font-bold text-lg text-charcoal-900 mb-3 flex items-center gap-2">
-                                    <Phone className="text-chartreuse-500" size={20} /> Call Us
+                                    <Phone className="text-green-500" size={20} /> โทรติดต่อเรา
                                 </h3>
-                                <p className="text-gray-600 font-mono text-lg font-bold">{settings.phone1 || "02-123-4567"}</p>
-                                <p className="text-gray-600 font-mono text-lg font-bold">{settings.phone2 || "089-999-999"}</p>
+                                <p className="text-gray-900 font-mono text-lg font-bold">{settings.phone1 || "02-123-4567"}</p>
+                                <p className="text-gray-900 font-mono text-lg font-bold">{settings.phone2 || "089-999-999"}</p>
                             </div>
                             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                                 <h3 className="font-bold text-lg text-charcoal-900 mb-3 flex items-center gap-2">
-                                    <Clock className="text-blue-500" size={20} /> Opening Hours
+                                    <Clock className="text-blue-500" size={20} /> เวลาทำการ
                                 </h3>
-                                <div className="text-sm text-gray-600 space-y-1">
+                                <div className="text-sm text-gray-700 space-y-1">
                                     <div className="flex justify-between">
-                                        <span>{settings.hoursLabel1 || "Mon - Sat"}:</span>
+                                        <span>{settings.hoursLabel1 || "จันทร์ - เสาร์"}:</span>
                                         <span className="font-bold">{settings.hoursWeekdays || "08:30 - 18:00"}</span>
                                     </div>
                                     <div className="flex justify-between text-red-500">
-                                        <span>{settings.hoursLabel2 || "Sunday"}:</span>
-                                        <span className="font-bold">{settings.hoursWeekend || "Closed"}</span>
+                                        <span>{settings.hoursLabel2 || "อาทิตย์"}:</span>
+                                        <span className="font-bold">{settings.hoursWeekend || "ปิดทำการ"}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="bg-charcoal-900 text-white p-8 rounded-2xl shadow-lg">
-                            <h3 className="text-xl font-bold text-gold-500 mb-6">Connect With Us</h3>
+                            <h3 className="text-xl font-bold text-blue-400 mb-6">ช่องทางติดตามข่าวสาร</h3>
                             <div className="flex gap-4">
                                 {settings.facebook && (
                                     <a href={settings.facebook} target="_blank" rel="noopener noreferrer" className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition-colors">

@@ -18,7 +18,7 @@ export default async function EditProfilePage() {
 
     return (
         <div className="container max-w-2xl mx-auto py-12 px-4">
-            <h1 className="text-3xl font-heading font-black text-charcoal-900 mb-6">Edit Profile</h1>
+            <h1 className="text-3xl font-heading font-black text-white mb-6 uppercase italic border-b-4 border-blue-500 inline-block pr-6">แก้ไขข้อมูลส่วนตัว</h1>
             <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
                 <EditProfileForm profile={profile} user={user} />
             </div>

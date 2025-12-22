@@ -10,14 +10,14 @@ export default async function AccountingPage() {
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-heading font-bold text-charcoal-900">Accounting (Google Sheets)</h1>
+            <h1 className="text-3xl font-heading font-bold text-charcoal-900">บัญชีรายรับ-รายจ่าย (Google Sheets)</h1>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-500 font-medium">Total Income</p>
+                            <p className="text-sm text-gray-500 font-medium">รายรับรวม</p>
                             <h3 className="text-2xl font-bold text-green-600 mt-1">฿{stats.income.toLocaleString()}</h3>
                         </div>
                         <div className="bg-green-100 p-3 rounded-full">
@@ -29,7 +29,7 @@ export default async function AccountingPage() {
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-500 font-medium">Total Expenses</p>
+                            <p className="text-sm text-gray-500 font-medium">รายจ่ายรวม</p>
                             <h3 className="text-2xl font-bold text-red-600 mt-1">฿{stats.expense.toLocaleString()}</h3>
                         </div>
                         <div className="bg-red-100 p-3 rounded-full">
@@ -41,13 +41,13 @@ export default async function AccountingPage() {
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-500 font-medium">Net Profit</p>
+                            <p className="text-sm text-gray-500 font-medium">กำไรสุทธิ</p>
                             <h3 className={`text-2xl font-bold mt-1 ${stats.profit >= 0 ? 'text-charcoal-900' : 'text-red-600'}`}>
                                 ฿{stats.profit.toLocaleString()}
                             </h3>
                         </div>
-                        <div className="bg-gold-100 p-3 rounded-full">
-                            <Banknote className="w-6 h-6 text-gold-600" />
+                        <div className="bg-blue-100 p-3 rounded-full">
+                            <Banknote className="w-6 h-6 text-blue-600" />
                         </div>
                     </div>
                 </div>
@@ -63,23 +63,23 @@ export default async function AccountingPage() {
                 <div className="lg:col-span-2">
                     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-200">
-                            <h3 className="font-bold text-lg text-charcoal-900">Recent Transactions</h3>
+                            <h3 className="font-bold text-lg text-charcoal-900">รายการล่าสุด</h3>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
                                     <tr>
-                                        <th className="px-6 py-3">Date</th>
-                                        <th className="px-6 py-3">Category</th>
-                                        <th className="px-6 py-3">Description</th>
-                                        <th className="px-6 py-3 text-right">Amount</th>
+                                        <th className="px-6 py-3">วันที่</th>
+                                        <th className="px-6 py-3">หมวดหมู่</th>
+                                        <th className="px-6 py-3">รายละเอียด</th>
+                                        <th className="px-6 py-3 text-right">จำนวนเงิน</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
                                     {transactions.length === 0 ? (
                                         <tr>
                                             <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                                                No transactions found in Sheet.
+                                                ไม่พบรายการใน Sheet
                                             </td>
                                         </tr>
                                     ) : (

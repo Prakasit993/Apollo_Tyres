@@ -18,39 +18,39 @@ export function EditProfileForm({ profile, user }: { profile: any, user: any }) 
         <form action={formAction} className="space-y-6">
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name (ชื่อ-นามสกุล)</Label>
-                    <Input id="fullName" name="fullName" defaultValue={defaultName} required />
+                    <Label htmlFor="fullName" className="text-charcoal-900">ชื่อ-นามสกุล</Label>
+                    <Input id="fullName" name="fullName" defaultValue={defaultName} required className="bg-white text-gray-900 border-gray-300" />
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number (เบอร์โทร)</Label>
-                    <Input id="phone" name="phone" type="tel" defaultValue={profile?.phone || ''} required />
+                    <Label htmlFor="phone" className="text-charcoal-900">เบอร์โทรศัพท์</Label>
+                    <Input id="phone" name="phone" type="tel" defaultValue={profile?.phone || ''} required className="bg-white text-gray-900 border-gray-300" />
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="address">Address (ที่อยู่ / บ้านเลขที่ / ซอย)</Label>
-                    <Textarea id="address" name="address" defaultValue={profile?.address || ''} required />
+                    <Label htmlFor="address" className="text-charcoal-900">ที่อยู่</Label>
+                    <Textarea id="address" name="address" defaultValue={profile?.address || ''} required className="bg-white text-gray-900 border-gray-300" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="district">District (ตำบล/แขวง)</Label>
-                        <Input id="district" name="district" defaultValue={profile?.district || ''} required />
+                        <Label htmlFor="district" className="text-charcoal-900">ตำบล/แขวง</Label>
+                        <Input id="district" name="district" defaultValue={profile?.district || ''} required className="bg-white text-gray-900 border-gray-300" />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="amphoe">Amphoe (อำเภอ/เขต)</Label>
-                        <Input id="amphoe" name="amphoe" defaultValue={profile?.amphoe || ''} required />
+                        <Label htmlFor="amphoe" className="text-charcoal-900">อำเภอ/เขต</Label>
+                        <Input id="amphoe" name="amphoe" defaultValue={profile?.amphoe || ''} required className="bg-white text-gray-900 border-gray-300" />
                     </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="province">Province (จังหวัด)</Label>
-                        <Input id="province" name="province" defaultValue={profile?.province || ''} required />
+                        <Label htmlFor="province" className="text-charcoal-900">จังหวัด</Label>
+                        <Input id="province" name="province" defaultValue={profile?.province || ''} required className="bg-white text-gray-900 border-gray-300" />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="zipcode">Zipcode (รหัสไปรษณีย์)</Label>
-                        <Input id="zipcode" name="zipcode" defaultValue={profile?.zipcode || ''} required />
+                        <Label htmlFor="zipcode" className="text-charcoal-900">รหัสไปรษณีย์</Label>
+                        <Input id="zipcode" name="zipcode" defaultValue={profile?.zipcode || ''} required className="bg-white text-gray-900 border-gray-300" />
                     </div>
                 </div>
             </div>
@@ -63,17 +63,17 @@ export function EditProfileForm({ profile, user }: { profile: any, user: any }) 
                 <Button
                     type="button"
                     variant="outline"
-                    className="w-full"
+                    className="w-full text-gray-700"
                     onClick={() => {
                         if (confirm("ถ้าคุณยกเลิก คุณจะไม่สามารถทำการสั่งซื้อได้จนกว่าจะกรอกข้อมูลครบถ้วน\nต้องการกลับไปหน้าหลักหรือไม่?")) {
                             router.push('/')
                         }
                     }}
                 >
-                    Cancel
+                    ยกเลิก
                 </Button>
-                <Button type="submit" disabled={isPending} className="w-full bg-gold-500 text-charcoal-900 hover:bg-gold-600 font-bold">
-                    {isPending ? 'Saving...' : 'Save Changes'}
+                <Button type="submit" disabled={isPending} className="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold">
+                    {isPending ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}
                 </Button>
             </div>
         </form>

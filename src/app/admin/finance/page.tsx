@@ -9,7 +9,7 @@ export default async function FinancePage() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-heading font-black text-charcoal-900">Finance Settings</h1>
+            <h1 className="text-3xl font-heading font-black text-charcoal-900">ตั้งค่าการเงิน</h1>
             <FinanceForm
                 initialBankName={bankName}
                 initialBankAccNum={bankAccNum}
