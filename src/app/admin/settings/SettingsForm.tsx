@@ -10,16 +10,19 @@ interface SettingsFormProps {
     initialRemarks: string
     initialPrivacyContent: string
     initialTermsContent: string
+    initialHeroImageUrl: string
 }
 
 export function SettingsForm({
     initialRemarks,
     initialPrivacyContent,
-    initialTermsContent
+    initialTermsContent,
+    initialHeroImageUrl
 }: SettingsFormProps) {
     const [remarks, setRemarks] = useState(initialRemarks || "")
     const [privacyContent, setPrivacyContent] = useState(initialPrivacyContent || "")
     const [termsContent, setTermsContent] = useState(initialTermsContent || "")
+    const [heroImageUrl, setHeroImageUrl] = useState(initialHeroImageUrl || "")
 
     const [isPending, startTransition] = useTransition()
 
@@ -28,7 +31,8 @@ export function SettingsForm({
             const results = await Promise.all([
                 updateSettings('checkout_remarks', remarks),
                 updateSettings('privacy_content', privacyContent),
-                updateSettings('terms_content', termsContent)
+                updateSettings('terms_content', termsContent),
+                updateSettings('hero_image_url', heroImageUrl)
             ])
 
             const errors = results.filter(r => !r.success).map(r => r.message)
@@ -43,6 +47,24 @@ export function SettingsForm({
 
     return (
         <div className="space-y-6">
+            {/* Hero Image Section */}
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="heroImage" className="text-lg font-bold text-charcoal-900">รูปภาพ Hero หน้าแรก</Label>
+                    <p className="text-sm text-gray-500">
+                        กรอก path ของรูปใน Supabase Storage (เช่น images/shop-gallery/111.jpg) หรือ URL เต็ม
+                    </p>
+                    <input
+                        id="heroImage"
+                        type="text"
+                        value={heroImageUrl}
+                        onChange={(e) => setHeroImageUrl(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
+                        placeholder="images/shop-gallery/111.jpg"
+                    />
+                </div>
+            </div>
+
             {/* Remarks Section */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
                 <div className="space-y-2">

@@ -5,6 +5,7 @@ export default async function SettingsPage() {
     const remarks = await getSettings('checkout_remarks')
     const privacyContent = await getSettings('privacy_content')
     const termsContent = await getSettings('terms_content')
+    const heroImageUrl = await getSettings('hero_image_url')
 
     return (
         <div className="space-y-6">
@@ -13,6 +14,7 @@ export default async function SettingsPage() {
                 initialRemarks={remarks}
                 initialPrivacyContent={privacyContent}
                 initialTermsContent={termsContent}
+                initialHeroImageUrl={heroImageUrl}
             />
         </div>
     )

@@ -1,16 +1,18 @@
 import Link from "next/link"
 import { ShoppingBag, MapPin, CheckCircle2 } from "lucide-react"
+import { getHeroImageUrl } from "@/lib/storage"
 
-export function HeroModern() {
+export async function HeroModern() {
+    const heroImageUrl = await getHeroImageUrl()
+
     return (
         <section className="relative bg-black text-white w-full overflow-hidden">
             {/* Background with Gradient Overlay */}
-            {/* Background with Gradient Overlay */}
             <div className="absolute inset-0 bg-neutral-900">
-                {/* Background Image - Placed FIRST so it is behind the gradient */}
+                {/* Background Image - Dynamically loaded from database */}
                 <div
-                    className="absolute inset-0 bg-[url('https://ddmabddmmcmpsmkzytju.supabase.co/storage/v1/object/public/images/shop-gallery/111.jpg')] 
-                    bg-cover bg-center bg-no-repeat opacity-80"
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-80"
+                    style={{ backgroundImage: `url('${heroImageUrl}')` }}
                 />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent/20 z-10" />
