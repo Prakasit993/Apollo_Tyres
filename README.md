@@ -1,162 +1,184 @@
-Step 0: กำหนด MVP ให้แคบก่อน (กันงานบาน)
+🚗 Tyre E-commerce Platform (Apollo Tyres)
 
-MVP1 (แนะนำ):
+End-to-End E-commerce Web Application for Automotive Tyre Sales
+Built with Next.js + Supabase, featuring a complete storefront and admin back-office system.
 
-Login: Google ก่อน (LINE LIFF ค่อยต่อเป็น MVP2)
+🔗 Live Demo: https://tyre.mybabymeal.com
 
-Home: filter + list สินค้า (mock หรือ Supabase ก็ได้)
+📌 Project Overview
 
-Product detail + เลือกจำนวน + กติกาชุด 4 เส้น
+This project is a full-stack E-commerce platform for selling automotive tyres, designed and developed to demonstrate real-world business logic, system thinking, and end-to-end ownership.
 
-Cart + Checkout
+The system covers both:
 
-สร้าง Order ลง Supabase
+Customer-facing storefront (product browsing, cart, checkout)
 
-ยิง Webhook ไป n8n เพื่อแจ้ง admin
+Admin back-office dashboard (product, stock, promotion, and order management)
 
-Admin กดยืนยัน “รับโอน/ยกเลิก” (ผ่าน n8n) แล้วอัปเดตสถานะออเดอร์
+The focus of this project is usability, business flow correctness, and production-ready architecture, rather than UI-only implementation.
 
-เหตุผล: LINE LIFF + ผูกบัญชีให้เนียน “ยากที่สุด” เอาไว้ทีหลังได้ แต่ระบบขายเดินได้ก่อน
+🧩 Core Features
+🛍️ Storefront (User)
 
-Step 1: ตั้งโปรเจกต์เว็บ + โครงหน้า (1 วัน)
+Product catalog with tyre specifications (brand, model, size)
 
-ทำให้ “เห็นหน้าเว็บเหมือนตัวอย่าง” ก่อน
+SEO-friendly product URLs (slug-based)
 
-สร้าง Next.js + Tailwind + shadcn/ui
+Add to cart with quantity control
 
-ทำ routes เปล่า ๆ: / /login /onboarding/shipping /products/[slug] /cart /checkout /account
+Promotion logic (e.g. special price for tyre sets)
 
-จบ Step นี้เมื่อ: เปิดเว็บแล้วมี Home layout + filter sidebar + product cards (mock data ก็ได้)
+Checkout flow with order summary
 
-Step 2: ตั้ง Supabase (Auth + DB) (ครึ่งวัน–1 วัน)
-2.1 Auth
+User account & order history
 
-เปิด Google Provider ใน Supabase Auth
+Google OAuth login via Supabase Auth
 
-ตั้ง redirect URLs (dev/prod)
+🛠️ Admin Dashboard
 
-2.2 DB Schema (อย่างน้อย)
+Secure admin login (role-based access)
 
-profiles
+Product management (CRUD)
 
-shipping_profiles
+Stock & price management
 
-products, variants, stock
+Promotion configuration
 
-orders, order_items, payments
+Order lifecycle management:
 
-2.3 RLS (สำคัญมาก)
+Pending → Paid → Shipped → Completed
 
-ลูกค้า: อ่าน products/variants/stock ได้
+Cancelled (fallback flow)
 
-ลูกค้า: เขียน orders/order_items ได้เฉพาะ user_id = auth.uid()
+Sales overview dashboard
 
-การ “ยืนยันรับโอน/ตัดสต๊อก” ให้ทำผ่าน n8n + service role (ไม่ให้ client ทำเอง)
+Manual status updates with validation
 
-จบ Step นี้เมื่อ: สมัคร/ล็อกอิน Google แล้วเห็น user ใน Supabase และตารางพร้อมใช้งาน
+🔐 Authentication & Authorization
 
-Step 3: ทำ Login + Redirect ตามโปรไฟล์ที่อยู่ (1 วัน)
+Supabase Auth (Email / Google OAuth)
 
-Flow:
+Role-based access control (User / Admin)
 
-user login (Google)
+Admin routes protected at API and UI level
 
-หลัง login เข้า middleware/guard เช็ค shipping_profiles.is_complete
+Designed to support:
 
-ถ้าไม่มี → ไป /onboarding/shipping
+Login rate limiting (planned)
 
-ถ้ามี → กลับ /
+Audit logging for admin actions (planned)
 
-จบ Step นี้เมื่อ:
+🏗️ System Architecture (High Level)
+User / Admin
+     |
+     v
+Next.js Frontend
+(Storefront & Admin Dashboard)
+     |
+     v
+Supabase Backend
+- Auth (Google OAuth)
+- PostgreSQL Database
+- Role-based Access Control
+     |
+     v
+Automation Layer (Planned)
+- n8n workflows
+- LINE OA admin notifications
 
-ล็อกอินครั้งแรกเด้งไปกรอกที่อยู่
+🧠 Tech Stack
+Frontend
 
-กรอกเสร็จแล้วกลับ home
+Next.js
 
-ล็อกอินครั้งต่อไปเด้งเข้า home ทันที
+React
 
-Step 4: Product + Search filter ให้ใช้งานจริง (1–2 วัน)
+TypeScript
 
-เริ่มง่าย:
+HTML5 / CSS3
 
-ดึง variants มาแสดงเป็นการ์ด
+Backend / Data
 
-filter ด้วย:
+Supabase
 
-tire brand
+PostgreSQL
 
-width/aspect/construct/rim
+Auth (Google OAuth)
 
-price min/max
+Row Level Security (RLS)
 
-รองรับ input “195/65R15” แล้ว parse
+Others
 
-จบ Step นี้เมื่อ: ค้นหาแล้ว list เปลี่ยนตาม filter ได้จริง
+REST API / JSON
 
-Step 5: Cart + Pricing ชุด 4 เส้น (1 วัน)
+SEO-friendly routing
 
-ทำ cart state (localStorage หรือ DB ก็ได้ เริ่ม local ก่อน)
+Deployment-ready structure
 
-pricing rule:
+Automation (planned): n8n
 
-sets = floor(qty/4)
+Notification (planned): LINE OA
 
-remainder = qty%4
+📊 Business Logic Highlights
 
-total = setsset4_price + remainderunit_price
+Clear order lifecycle with controlled state transitions
 
-แสดง breakdown ใน cart ชัด ๆ
+Promotion logic separated from base pricing
 
-จบ Step นี้เมื่อ: ใส่ 4 เส้น/5 เส้น แล้วราคาถูกคิดถูกต้อง
+Stock consistency across order status changes
 
-Step 6: Checkout → Create Order ใน Supabase (1 วัน)
+Admin-only data mutation with role verification
 
-ลูกค้ากดสั่งซื้อ
+Designed for future scalability and automation
 
-สร้าง orders + order_items
+🚧 Current Limitations & Roadmap
 
-ตั้งสถานะ:
+This project is intentionally paused to review gaps and improve quality.
 
-เงินสดรับเอง → awaiting_pickup
+In Progress / Planned
 
-โอน/QR → pending_payment + pending_verify
+SEO enhancements (OG tags, sitemap, canonical URLs)
 
-แล้วไปหน้า success
+Security hardening:
 
-จบ Step นี้เมื่อ: มี order จริงใน Supabase และหน้า order history เห็นรายการ
+Login rate limiting
 
-Step 7: เชื่อม n8n (แจ้ง admin + ปุ่มยืนยัน/ยกเลิก) (1–2 วัน)
-7.1 เว็บยิง webhook ไป n8n ตอน order.created
+Brute-force protection
 
-payload แบบมาตรฐาน (ที่ผมให้ไปก่อนหน้า) ใช้ได้เลย
+Admin audit logs
 
-7.2 n8n ส่งเข้า LINE admin
+Automation workflows:
 
-ส่งข้อความสรุปออเดอร์
+Order notifications via LINE OA
 
-แนบปุ่ม:
+Stock alerts
 
-“ยืนยันรับโอน”
+Daily admin reports (n8n)
 
-“ยกเลิก / ไม่ได้รับเงิน”
-(ปุ่มยิงกลับ webhook ของ n8n)
+🎯 Project Goals
 
-7.3 เมื่อ admin กด confirm
+Demonstrate end-to-end ownership of a real E-commerce system
 
-n8n update payment_status=paid
+Show understanding of business logic, not just UI
 
-ตัดสต๊อก (stock.qty_on_hand - qty)
+Practice production-ready architecture and roadmap planning
 
-update order_status=preparing
+Serve as a foundation for future automation-focused projects
 
-แจ้ง staff + แจ้งลูกค้า (email/LINE)
+👤 Author
 
-จบ Step นี้เมื่อ: ออเดอร์เข้า → admin กดยืนยัน → สต๊อกลด → สถานะเปลี่ยน
+Prakasit Kangthin
+Web Developer – E-commerce Platform
+🔗 GitHub: https://github.com/Prakasit993
 
-Step 8 (ค่อยทำทีหลัง): LINE LIFF Login (MVP2)
+This project was designed, developed, and maintained by a single developer, using AI tools as development assistants while maintaining full responsibility for system design, logic, and outcomes.
 
-หลัง MVP1 วิ่งแล้ว ค่อยเพิ่ม LIFF:
+✅ Recommended GitHub Setup
 
-Login ด้วย LIFF → ได้ line_user_id
+⭐ Pin this repository
 
-ผูกเข้ากับ profiles (และถ้าจะให้เป็น “บัญชีเดียวกับ Google” ค่อยทำ account linking เพิ่ม)
+🔓 Keep this repo Public
+
+🔒 Keep experimental / incomplete repos Private
+
+📌 Add this repo to GitHub Featured section
