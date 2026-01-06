@@ -1,92 +1,102 @@
-🚗 Tyre E-commerce Platform (Apollo Tyres)
+🚗 Apollo Tyres – ระบบขายยางรถยนต์ออนไลน์
 
-End-to-End E-commerce Web Application for Automotive Tyre Sales
-Built with Next.js + Supabase, featuring a complete storefront and admin back-office system.
+แพลตฟอร์ม E-commerce สำหรับจำหน่ายยางรถยนต์แบบครบวงจร (End-to-End)
+พัฒนาด้วย Next.js + Supabase ครอบคลุมทั้งหน้าร้าน (User) และระบบหลังบ้าน (Admin)
 
 🔗 Live Demo: https://tyre.mybabymeal.com
 
-📌 Project Overview
+📌 ภาพรวมโปรเจกต์ (Project Overview)
 
-This project is a full-stack E-commerce platform for selling automotive tyres, designed and developed to demonstrate real-world business logic, system thinking, and end-to-end ownership.
+โปรเจกต์นี้ถูกออกแบบและพัฒนาเพื่อจำลอง ระบบขายสินค้าออนไลน์ที่ใช้งานได้จริง
+โดยเน้นความถูกต้องของ business logic, ความปลอดภัย และการดูแลระบบแบบ end-to-end
 
-The system covers both:
+ระบบประกอบด้วย:
 
-Customer-facing storefront (product browsing, cart, checkout)
+หน้าร้าน (Storefront) สำหรับลูกค้า
 
-Admin back-office dashboard (product, stock, promotion, and order management)
+ระบบหลังบ้าน (Admin Dashboard) สำหรับจัดการสินค้า คำสั่งซื้อ และโปรโมชัน
 
-The focus of this project is usability, business flow correctness, and production-ready architecture, rather than UI-only implementation.
+เหมาะสำหรับใช้เป็น Portfolio เพื่อสมัครงานสาย Web Developer / Full-stack / System-oriented Developer
 
-🧩 Core Features
-🛍️ Storefront (User)
+🧩 ฟีเจอร์หลักของระบบ
+🛒 ฝั่งผู้ใช้งาน (User / Customer)
 
-Product catalog with tyre specifications (brand, model, size)
+แสดงรายการสินค้า (ยางรถยนต์) พร้อมรายละเอียดรุ่นและขนาด
 
-SEO-friendly product URLs (slug-based)
+URL แบบ SEO-friendly (slug-based)
 
-Add to cart with quantity control
+ระบบตะกร้าสินค้า (Add / Remove / ปรับจำนวน)
 
-Promotion logic (e.g. special price for tyre sets)
+ระบบโปรโมชัน (เช่น ราคาพิเศษเมื่อซื้อครบชุด)
 
-Checkout flow with order summary
+สรุปคำสั่งซื้อและขั้นตอน Checkout
 
-User account & order history
+ระบบเข้าสู่ระบบด้วย Google (Supabase Auth)
 
-Google OAuth login via Supabase Auth
+ประวัติคำสั่งซื้อของผู้ใช้งาน
 
-🛠️ Admin Dashboard
+🛠️ ฝั่งผู้ดูแลระบบ (Admin Dashboard)
 
-Secure admin login (role-based access)
+เข้าสู่ระบบด้วยสิทธิ์ Admin (Role-based)
 
-Product management (CRUD)
+จัดการสินค้า (เพิ่ม / แก้ไข / ลบ)
 
-Stock & price management
+จัดการสต็อกและราคา
 
-Promotion configuration
+จัดการโปรโมชัน
 
-Order lifecycle management:
+จัดการสถานะคำสั่งซื้อ:
 
-Pending → Paid → Shipped → Completed
+Pending
 
-Cancelled (fallback flow)
+Paid
 
-Sales overview dashboard
+Shipped
 
-Manual status updates with validation
+Completed
 
-🔐 Authentication & Authorization
+Cancelled
 
-Supabase Auth (Email / Google OAuth)
+ออกแบบ flow ให้รองรับการขยายในอนาคต
 
-Role-based access control (User / Admin)
+🔐 ระบบยืนยันตัวตนและความปลอดภัย (Security)
 
-Admin routes protected at API and UI level
+ใช้ Supabase Auth
 
-Designed to support:
+Google OAuth
 
-Login rate limiting (planned)
+Email / Password (รองรับในโครงสร้าง)
 
-Audit logging for admin actions (planned)
+แยกสิทธิ์การเข้าถึงแบบ User / Admin
 
-🏗️ System Architecture (High Level)
+ป้องกัน route ฝั่ง Admin
+
+ออกแบบให้รองรับ:
+
+Rate limiting (แผนพัฒนา)
+
+Audit log สำหรับ Admin action (แผนพัฒนา)
+
+🏗️ โครงสร้างระบบ (System Architecture – High Level)
 User / Admin
      |
      v
 Next.js Frontend
-(Storefront & Admin Dashboard)
+- Storefront
+- Admin Dashboard
      |
      v
 Supabase Backend
 - Auth (Google OAuth)
 - PostgreSQL Database
-- Role-based Access Control
+- Role-based Access Control (RLS)
      |
      v
-Automation Layer (Planned)
-- n8n workflows
-- LINE OA admin notifications
+Automation (แผนพัฒนา)
+- n8n
+- LINE OA Notification
 
-🧠 Tech Stack
+🧠 เทคโนโลยีที่ใช้ (Tech Stack)
 Frontend
 
 Next.js
@@ -95,90 +105,90 @@ React
 
 TypeScript
 
-HTML5 / CSS3
+HTML / CSS
 
-Backend / Data
+Backend & Database
 
 Supabase
 
 PostgreSQL
 
-Auth (Google OAuth)
+Authentication
 
 Row Level Security (RLS)
 
-Others
+อื่น ๆ
 
 REST API / JSON
 
 SEO-friendly routing
 
-Deployment-ready structure
+รองรับ deployment บน Vercel
 
-Automation (planned): n8n
+Automation (แผนพัฒนา): n8n
 
-Notification (planned): LINE OA
+Notification (แผนพัฒนา): LINE OA
 
-📊 Business Logic Highlights
+📊 แนวคิดด้าน Business Logic
 
-Clear order lifecycle with controlled state transitions
+ออกแบบ Order Lifecycle ให้สอดคล้องกับการทำงานจริง
 
-Promotion logic separated from base pricing
+แยก logic ราคา / โปรโมชัน / สต็อก ออกจาก UI
 
-Stock consistency across order status changes
+จำกัดสิทธิ์การแก้ไขข้อมูลเฉพาะ Admin
 
-Admin-only data mutation with role verification
+วางโครงสร้างให้ขยายระบบในอนาคตได้ง่าย
 
-Designed for future scalability and automation
+🚧 สิ่งที่อยู่ระหว่างพัฒนา / แผนต่อยอด
 
-🚧 Current Limitations & Roadmap
+ปรับปรุง SEO (Meta tag, Sitemap, OG)
 
-This project is intentionally paused to review gaps and improve quality.
+เสริมความปลอดภัย (Login rate limit, Brute-force protection)
 
-In Progress / Planned
+ระบบแจ้งเตือนอัตโนมัติ:
 
-SEO enhancements (OG tags, sitemap, canonical URLs)
+แจ้งคำสั่งซื้อใหม่
 
-Security hardening:
+แจ้งสต็อกใกล้หมด
 
-Login rate limiting
+Dashboard ภาพรวมสำหรับผู้ดูแล
 
-Brute-force protection
+Automation ด้วย n8n และ LINE OA
 
-Admin audit logs
+🔒 หมายเหตุด้านความปลอดภัย (Security Note)
 
-Automation workflows:
+โปรเจกต์นี้เปิดเป็น Public เพื่อใช้เป็น Portfolio
+ไม่มีการเก็บ Secret หรือ Service Role Key ไว้ใน Repository
+การเข้าถึงข้อมูลถูกควบคุมด้วย Supabase Auth และ Row Level Security
 
-Order notifications via LINE OA
+🎯 เป้าหมายของโปรเจกต์
 
-Stock alerts
+แสดงความสามารถในการพัฒนา ระบบ E-commerce แบบ end-to-end
 
-Daily admin reports (n8n)
+สะท้อนแนวคิดการทำงานแบบรับผิดชอบระบบทั้งภาพรวม
 
-🎯 Project Goals
+ใช้เป็นฐานในการพัฒนา automation และระบบธุรกิจในอนาคต
 
-Demonstrate end-to-end ownership of a real E-commerce system
+ใช้เป็น Portfolio สำหรับสมัครงานสาย Web / System / Automation
 
-Show understanding of business logic, not just UI
+👤 ผู้พัฒนา (Developer)
 
-Practice production-ready architecture and roadmap planning
+ประกาศิต กางถิ่น (Prakasit Kangthin)
+Web Developer / System-oriented Developer
 
-Serve as a foundation for future automation-focused projects
+GitHub: https://github.com/Prakasit993
 
-👤 Author
+LinkedIn: https://www.linkedin.com/in/prakasit993
 
-Prakasit Kangthin
-Web Developer – E-commerce Platform
-🔗 GitHub: https://github.com/Prakasit993
+Demo: https://tyre.mybabymeal.com
 
-This project was designed, developed, and maintained by a single developer, using AI tools as development assistants while maintaining full responsibility for system design, logic, and outcomes.
+โปรเจกต์นี้พัฒนาโดยผู้พัฒนาเพียงคนเดียว
+ใช้ AI เป็นเครื่องมือช่วยเพิ่มประสิทธิภาพ แต่รับผิดชอบการออกแบบ logic, security และผลลัพธ์ของระบบทั้งหมด
 
-✅ Recommended GitHub Setup
+✅ คำแนะนำสำหรับผู้ที่เข้ามาดู Repo
 
-⭐ Pin this repository
+โปรเจกต์นี้เน้น แนวคิดระบบและ business logic
 
-🔓 Keep this repo Public
+ไม่ได้ออกแบบเพื่อเป็น template หรือ library
 
-🔒 Keep experimental / incomplete repos Private
-
-📌 Add this repo to GitHub Featured section
+โค้ดถูกจัดโครงสร้างเพื่อรองรับการพัฒนาต่อในระดับ production
