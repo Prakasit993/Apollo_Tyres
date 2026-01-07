@@ -3,6 +3,8 @@ import { Oswald, Kanit } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CookieConsent } from "@/components/cookie-consent";
+import { CartSyncProvider } from "@/components/cart-sync-provider";
 
 // Configure fonts
 const oswald = Oswald({
@@ -48,11 +50,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${kanit.variable} ${oswald.variable} antialiased min-h-screen flex flex-col bg-neutral-900 text-gray-100 font-sans`}>
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <CartSyncProvider>
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
+        </CartSyncProvider>
       </body>
     </html>
   );

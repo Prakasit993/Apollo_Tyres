@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils"
 import { useCartStore } from "@/lib/cart-store"
 import { Check, ShoppingCart } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { createClient } from "@/lib/supabase"
 
 interface ProductCardProps {
     variants: Product[]
@@ -27,15 +26,7 @@ export function ProductCard({ variants }: ProductCardProps) {
     }, [variants])
 
     const handleAddToCart = async () => {
-        const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-
-        if (!user) {
-            alert("กรุณาล็อคอิน")
-            return
-        }
-
-        addToCart({
+        await addToCart({
             id: selectedProduct.id,
             model: selectedProduct.model,
             price: selectedProduct.price,
