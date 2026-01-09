@@ -93,6 +93,16 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
             }
         }
 
+
+        // 3. Notify n8n about status change
+        const { sendN8NWebhook } = await import('@/lib/n8n')
+        await sendN8NWebhook('order.updated', {
+            order_id: orderId,
+            status: newStatus,
+            previous_status: 'unknown', // We could fetch this if needed
+            updated_by: user.email
+        })
+
         revalidatePath('/admin/orders')
         return { success: true, message: "Order status updated" }
 

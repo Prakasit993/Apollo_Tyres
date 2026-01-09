@@ -274,34 +274,30 @@ export async function placeOrder(
                 )
             }
 
-            const webhookUrl = process.env.N8N_WEBHOOK_URL
-            if (webhookUrl) {
-                // Prepare payload
-                const payload = {
-                    order_id: order.id,
-                    customer: {
-                        name: fullName,
-                        phone: phone,
-                        address: address
-                    },
-                    items: cartItems.map((item: any) => ({
-                        product: `${item.brand} ${item.model}`,
-                        quantity: item.quantity,
-                        price: item.price
-                    })),
-                    total: cartTotal,
-                    payment_method: paymentMethod,
-                    delivery_method: deliveryMethod,
-                    created_at: new Date().toISOString()
-                }
+            // Notify n8n
+            console.log("Notifying n8n...")
+            const { sendN8NWebhook } = await import('@/lib/n8n')
 
-                // Send async
-                fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                }).catch(err => console.error("Webhook Error:", err))
+            // Prepare payload
+            const n8nPayload = {
+                order_id: order.id,
+                customer: {
+                    name: fullName,
+                    phone: phone,
+                    address: address
+                },
+                items: cartItems.map((item: any) => ({
+                    product: `${item.brand} ${item.model}`,
+                    quantity: item.quantity,
+                    price: item.price
+                })),
+                total: cartTotal,
+                payment_method: paymentMethod,
+                delivery_method: deliveryMethod,
+                slip_url: slipUrl
             }
+
+            await sendN8NWebhook('order.created', n8nPayload)
         } catch (e) {
             // Ignore webhook/email errors so we don't fail the order if email fails
             console.error("Notification setup error", e)
