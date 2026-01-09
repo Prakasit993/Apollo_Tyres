@@ -42,9 +42,10 @@ export async function getTransactionsSetup() {
                 'Description',
                 'ReferenceID' // Order ID or manually entered ref
             ])
-        } catch (e: any) {
+        } catch (e: unknown) {
             // If it failed because it already exists, just load it
-            if (e.message && e.message.includes('already exists')) {
+            const err = e as Error
+            if (err.message && err.message.includes('already exists')) {
                 await doc.loadInfo() // Refresh cache
                 sheet = doc.sheetsByTitle['Transactions']
             } else {

@@ -26,7 +26,7 @@ export default async function TermsPage() {
                         <section>
                             <h2 className="text-xl font-semibold text-charcoal-900 mb-3">1. ข้อมูลทั่วไป</h2>
                             <p>
-                                เว็บไซต์นี้ดำเนินการโดย TireSelect ตลอดทั้งไซต์ คำว่า "เรา", "พวกเรา" และ "ของเรา" หมายถึง TireSelect
+                                เว็บไซต์นี้ดำเนินการโดย TireSelect ตลอดทั้งไซต์ คำว่า &quot;เรา&quot;, &quot;พวกเรา&quot; และ &quot;ของเรา&quot; หมายถึง TireSelect
                                 เราขอสงวนสิทธิ์ในการแก้ไขหรือเปลี่ยนแปลงเงื่อนไขเหล่านี้ได้ตลอดเวลาโดยไม่ต้องแจ้งให้ทราบล่วงหน้า
                             </p>
                         </section>

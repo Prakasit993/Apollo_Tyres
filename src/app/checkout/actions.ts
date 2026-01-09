@@ -23,6 +23,7 @@ export type CheckoutState = {
         [key: string]: string[]
     }
     success?: boolean
+    orderId?: string
 }
 
 // New action to update profile directly from Checkout "Save" button
@@ -306,12 +307,12 @@ export async function placeOrder(
             console.error("Notification setup error", e)
         }
 
+        // 7. Return Success with Order ID
+        revalidatePath('/orders')
+        return { success: true, orderId: order.id }
+
     } catch (error: any) {
         console.error("Full Order Error:", error)
         return { message: `Database Error: ${error.message || JSON.stringify(error)}` }
     }
-
-    // 7. Redirect on Success
-    revalidatePath('/orders')
-    return { success: true }
 }

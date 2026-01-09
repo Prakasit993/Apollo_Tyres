@@ -2,12 +2,14 @@ import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Package, Calendar, MapPin, CreditCard } from "lucide-react"
+import { ArrowLeft, Package, Calendar, MapPin, CreditCard, CheckCircle } from "lucide-react"
 import { format } from "date-fns"
 
 export const dynamic = 'force-dynamic'
 
-export default async function UserOrdersPage() {
+export default async function UserOrdersPage({ searchParams }: { searchParams: Promise<{ success?: string }> }) {
+    const resolvedParams = await searchParams;
+    const isSuccess = resolvedParams?.success === 'true'
     const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
@@ -57,8 +59,16 @@ export default async function UserOrdersPage() {
                 </Link>
                 <h1 className="text-3xl font-heading font-black text-charcoal-900">MY ORDERS</h1>
             </div>
-
             <div className="space-y-6">
+                {isSuccess && (
+                    <div className="mb-8 bg-green-50 border border-green-200 rounded-lg p-6 flex flex-col items-center text-center animate-in fade-in slide-in-from-top-4">
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600">
+                            <CheckCircle size={32} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-green-800 mb-2">Order Placed Successfully!</h2>
+                        <p className="text-green-700">Thank you for your purchase. We will contact you shortly to confirm details.</p>
+                    </div>
+                )}
                 {!orders || orders.length === 0 ? (
                     <div className="text-center py-20 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                         <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />

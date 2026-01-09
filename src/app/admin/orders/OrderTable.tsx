@@ -2,7 +2,7 @@
 
 import { useState, Fragment } from "react"
 import { format } from "date-fns"
-import { ChevronDown, ChevronUp, Package, Truck, CheckCircle, Clock, Trash2 } from "lucide-react"
+import { Trash2 } from "lucide-react"
 import { updateOrderStatus, deleteOrder } from "./actions"
 import { Button } from "@/components/ui/button"
 import {
@@ -99,11 +99,11 @@ export function OrderTable({ initialOrders }: { initialOrders: any[] }) {
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="pending">Pending</SelectItem>
-                                                <SelectItem value="paid">Paid</SelectItem>
-                                                <SelectItem value="shipped">Shipped</SelectItem>
-                                                <SelectItem value="completed">Completed</SelectItem>
-                                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                                                <SelectItem value="pending" className="text-gray-900 cursor-pointer hover:bg-gray-100">Pending</SelectItem>
+                                                <SelectItem value="paid" className="text-gray-900 cursor-pointer hover:bg-gray-100">Paid</SelectItem>
+                                                <SelectItem value="shipped" className="text-gray-900 cursor-pointer hover:bg-gray-100">Shipped</SelectItem>
+                                                <SelectItem value="completed" className="text-gray-900 cursor-pointer hover:bg-gray-100">Completed</SelectItem>
+                                                <SelectItem value="cancelled" className="text-gray-900 cursor-pointer hover:bg-gray-100">Cancelled</SelectItem>
                                             </SelectContent>
                                         </Select>
 

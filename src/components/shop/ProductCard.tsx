@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { useCartStore } from "@/lib/cart-store"
 import { Check, ShoppingCart } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { createClient } from "@/lib/supabase"
 
 interface ProductCardProps {
     variants: Product[]
@@ -26,16 +27,65 @@ export function ProductCard({ variants }: ProductCardProps) {
     }, [variants])
 
     const handleAddToCart = async () => {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+
+        if (!user) {
+            alert('กรุณาล็อกอินก่อนเพิ่มสินค้าลงตะกร้า')
+            window.location.href = '/login'
+            return
+        }
+
+        // Determine quantity to add based on promo_min_quantity
+
+        const quantityToAdd = (selectedProduct.promo_min_quantity && selectedProduct.promo_min_quantity > 1)
+            ? selectedProduct.promo_min_quantity
+            : 1
+
+        // Logic to handle Bundle Price (e.g. 14,000 for 4 tires)
+        // If promo_price > price AND min_qty > 1, assume it's a bundle price
+        let promoUnitPrice = selectedProduct.promotional_price
+        let isBundlePrice = false
+
+        if (selectedProduct.promotional_price &&
+            selectedProduct.promo_min_quantity &&
+            selectedProduct.promo_min_quantity > 1 &&
+            selectedProduct.promotional_price > selectedProduct.price) {
+
+            promoUnitPrice = selectedProduct.promotional_price / selectedProduct.promo_min_quantity
+            isBundlePrice = true
+        }
+
+        // Use promotional price ONLY if it's valid (lower than regular price per unit)
+        const hasValidPromo = promoUnitPrice &&
+            promoUnitPrice > 0 &&
+            promoUnitPrice < selectedProduct.price
+
+        const effectivePrice = hasValidPromo
+            ? promoUnitPrice!
+            : selectedProduct.price
+
         await addToCart({
             id: selectedProduct.id,
             model: selectedProduct.model,
-            price: selectedProduct.price,
+            price: effectivePrice, // Always pass UNIT price to cart
             imageUrl: (selectedProduct as any).image_url || '',
             brand: selectedProduct.brand,
             specs: `${selectedProduct.width}/${selectedProduct.aspect_ratio} R${selectedProduct.rim}`
-        });
+        }, quantityToAdd); // Pass quantity as second parameter
 
-        // Show feedback
+        // Show feedback with quantity info  
+        // If it's a bundle promo, show the bundle price in the messsage
+        const displayTotal = isBundlePrice ? selectedProduct.promotional_price : (effectivePrice * quantityToAdd)
+
+        const message = hasValidPromo && quantityToAdd > 1
+            ? `เพิ่ม ${quantityToAdd} เส้นลงตะกร้าแล้ว (ราคาโปร ${displayTotal?.toLocaleString()} บาท)`
+            : quantityToAdd > 1
+                ? `เพิ่ม ${quantityToAdd} เส้นลงตะกร้าแล้ว`
+                : 'เพิ่มสินค้าลงตะกร้าแล้ว'
+
+        alert(message)
+
         setIsAdded(true)
         setTimeout(() => setIsAdded(false), 2000)
     }
@@ -72,10 +122,46 @@ export function ProductCard({ variants }: ProductCardProps) {
                     )}
                 </div>
 
-                {/* Hot/Sale Badge */}
-                {selectedProduct.featured && (
-                    <div className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1">
-                        ขายดี
+                {/* Promotional Badge or Min Quantity Message */}
+                {/* Promotional Badge or Min Quantity Message */}
+                {(() => {
+                    const minQty = selectedProduct.promo_min_quantity || 1
+                    let promoUnitPrice = selectedProduct.promotional_price
+                    let isBundlePrice = false
+
+                    // Detect Bundle Price logic
+                    if (selectedProduct.promotional_price && minQty > 1 && selectedProduct.promotional_price > selectedProduct.price) {
+                        promoUnitPrice = selectedProduct.promotional_price / minQty
+                        isBundlePrice = true
+                    }
+
+                    const hasValidPromo = promoUnitPrice && promoUnitPrice > 0 && promoUnitPrice < selectedProduct.price
+
+                    if (!hasValidPromo || !selectedProduct.promotional_price) return null;
+
+                    // Calculate total bundle price for display
+                    const totalBundlePrice = isBundlePrice
+                        ? selectedProduct.promotional_price
+                        : selectedProduct.promotional_price * minQty
+
+                    return minQty > 1 ? (
+                        // Show minimum quantity requirement
+                        <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-extrabold px-2 py-1 shadow-lg rounded-bl-lg">
+                            ซื้อครบ {minQty} เส้น<br />
+                            ราคา {totalBundlePrice.toLocaleString()} บาท
+                        </div>
+                    ) : (
+                        // Show discount percentage (min qty = 1, applies immediately)
+                        <div className="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-3 py-1 shadow-lg">
+                            ลด {Math.round((1 - promoUnitPrice! / selectedProduct.price) * 100)}%
+                        </div>
+                    )
+                })()}
+
+                {/* Featured/Promo Badge (only if no promo price badge shown) */}
+                {!selectedProduct.promotional_price && selectedProduct.featured && (
+                    <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-red-600 text-white text-xs font-bold px-3 py-1 shadow-lg">
+                        🔥 โปรโมชั่น
                     </div>
                 )}
             </Link>
@@ -115,8 +201,17 @@ export function ProductCard({ variants }: ProductCardProps) {
                             </SelectTrigger>
                             <SelectContent>
                                 {variants.map(v => (
-                                    <SelectItem key={v.id} value={v.id} className="text-xs">
-                                        {v.width}/{v.aspect_ratio} R{v.rim} - {v.price.toLocaleString()} บาท
+                                    <SelectItem key={v.id} value={v.id} className="text-xs text-gray-900">
+                                        {v.width}/{v.aspect_ratio} R{v.rim} -
+                                        {v.promotional_price && v.promotional_price > 0 && v.promotional_price < v.price ? (
+                                            <>
+                                                <span className="line-through text-gray-500 font-medium">{v.price.toLocaleString()}</span>
+                                                {' '}
+                                                <span className="text-red-600 font-extrabold">{v.promotional_price.toLocaleString()}</span> บาท
+                                            </>
+                                        ) : (
+                                            <>{v.price.toLocaleString()} บาท</>
+                                        )}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -130,9 +225,22 @@ export function ProductCard({ variants }: ProductCardProps) {
                         <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">
                             {hasMultipleVariants ? 'เริ่มต้น' : 'ราคาต่อเส้น'}
                         </p>
-                        <p className="text-xl font-black text-white">
-                            {selectedProduct.price.toLocaleString()} บาท
-                        </p>
+                        {selectedProduct.promotional_price &&
+                            selectedProduct.promotional_price > 0 &&
+                            selectedProduct.promotional_price < selectedProduct.price ? ( // Only show if actually cheaper
+                            <div className="flex flex-col gap-1">
+                                <p className="text-sm text-gray-400 line-through font-medium">
+                                    {selectedProduct.price.toLocaleString()} บาท
+                                </p>
+                                <p className="text-2xl font-black text-red-600">
+                                    {selectedProduct.promotional_price.toLocaleString()} บาท
+                                </p>
+                            </div>
+                        ) : (
+                            <p className="text-xl font-black text-white">
+                                {selectedProduct.price.toLocaleString()} บาท
+                            </p>
+                        )}
                     </div>
                 </div>
 

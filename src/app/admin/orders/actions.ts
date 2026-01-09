@@ -65,13 +65,14 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
             return { message: "Failed to update status" }
         }
 
-        // 1. Auto-remove from Google Sheets if Cancelled
-        if (newStatus === 'cancelled') {
-            await deleteTransactionByReference(orderId)
-        }
+        // 1. Auto-remove from Google Sheets if Cancelled OR if we are updating to a new status (to avoid duplicates before re-adding)
+        // This ensures if we move from 'Paid' -> 'Shipped', we don't add income twice, or if we move 'Paid' -> 'Cancelled', we remove it.
+        await deleteTransactionByReference(orderId)
 
-        // 2. Auto-record Income to Google Sheets when order is Paid/Processing
-        if (newStatus === 'paid' || newStatus === 'processing') {
+        // 2. Auto-record Income to Google Sheets when order is Paid/Shipped/Completed
+        // processing is usually "Waiting for payment" so we shouldn't record income yet? 
+        // actually based on previous code it had 'processing'. I'll stick to 'paid', 'shipped', 'completed' as "Money Recieved" states.
+        if (['paid', 'shipped', 'completed'].includes(newStatus)) {
             const { data: orderData } = await supabase
                 .from('tyres_orders')
                 .select('total_price, id, profiles:user_id(full_name)')
@@ -86,7 +87,7 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
                     type: 'Income',
                     category: 'Product Sale',
                     amount: orderData.total_price,
-                    description: `Order Sales - ${customerName}`,
+                    description: `Order Sales - ${customerName} (${newStatus})`,
                     referenceId: orderId
                 })
             }
@@ -142,16 +143,13 @@ export async function getAdminOrders() {
             const oneHour = 60 * 60 * 1000 // 1 Hour in milliseconds
 
             if (now - createdAt > oneHour) {
-                // Perform cancellation
-                const { error: updateError } = await supabase
-                    .from('tyres_orders')
-                    .update({ status: 'cancelled' })
-                    .eq('id', order.id)
+                // Perform cancellation using the shared logic to ensure stock is restored and sheets updated
+                const result = await updateOrderStatus(order.id, 'cancelled')
 
-                if (!updateError) {
+                if (result.success) {
                     return { ...order, status: 'cancelled' }
                 } else {
-                    console.error(`Failed to auto-cancel order ${order.id}:`, updateError)
+                    console.error(`Failed to auto-cancel order ${order.id}: ${result.message}`)
                 }
             }
         }

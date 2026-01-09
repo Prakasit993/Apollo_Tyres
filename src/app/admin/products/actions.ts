@@ -49,6 +49,10 @@ export async function upsertProduct(prevState: any, formData: FormData) {
     const brand = formData.get('brand') as string
     const model = formData.get('model') as string
     const price = parseFloat(formData.get('price') as string)
+    const promotionalPriceRaw = formData.get('promotionalPrice') as string
+    const promotionalPrice = promotionalPriceRaw ? parseFloat(promotionalPriceRaw) : null
+    const promoMinQuantityRaw = formData.get('promoMinQuantity') as string
+    const promoMinQuantity = promoMinQuantityRaw ? parseInt(promoMinQuantityRaw) : 1
     const stock = parseInt(formData.get('stock') as string)
     const width = parseInt(formData.get('width') as string)
     const aspectRatio = parseInt(formData.get('aspectRatio') as string)
@@ -78,12 +82,20 @@ export async function upsertProduct(prevState: any, formData: FormData) {
 
     const description = formData.get('description') as string
 
-    console.log("Upsert Product Debug:", { id, brand, imageUrl, galleryLength: gallery.length, slug })
+    console.log("Upsert Product Debug:", { id, brand, imageUrl, galleryLength: gallery.length, slug, promotionalPrice, promoMinQuantity })
+
+    // Auto-set featured to true when there's a valid promotional price
+    const hasValidPromo = promotionalPrice && promotionalPrice > 0
+    // Fix: Extract featured from form data, defaulting to false if undefined
+    const featured = formData.get('featured') === 'true' || formData.get('featured') === 'on'
 
     const productData = {
         brand,
         model,
         price,
+        promotional_price: promotionalPrice && promotionalPrice > 0 ? promotionalPrice : null,
+        promo_min_quantity: promoMinQuantity || 1,
+        featured: hasValidPromo ? true : featured, // Auto-tag as featured if has promo
         stock,
         width,
         aspect_ratio: aspectRatio,

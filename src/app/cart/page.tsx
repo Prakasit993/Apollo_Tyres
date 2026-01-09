@@ -8,11 +8,16 @@ import { useEffect, useState } from "react"
 
 export default function CartPage() {
     const [mounted, setMounted] = useState(false)
-    const { items, removeFromCart, updateQuantity, getCartBreakdown, getSubtotal, clearCart } = useCartStore()
+    const { items, removeFromCart, updateQuantity, getCartBreakdown, getSubtotal, clearCart, loadFromDatabase, isLoggedIn } = useCartStore()
 
     useEffect(() => {
         setMounted(true)
-    }, [])
+
+        // Load cart from database if user is logged in
+        if (isLoggedIn) {
+            loadFromDatabase()
+        }
+    }, [isLoggedIn, loadFromDatabase])
 
     if (!mounted) return null
 
@@ -107,22 +112,39 @@ export default function CartPage() {
                                 </button>
                             </div>
 
-                            {/* Promo Notification */}
-                            {item.brand === 'Apollo' && (
+                            {/* Promotional Quantity Warning - Dynamic for all products */}
+                            {/* Promotional Quantity Warning - Dynamic for all products */}
+                            {item.promo_min_quantity && item.promo_min_quantity > 1 && item.promotional_price && (
                                 <div className="mt-2 mb-4">
-                                    {item.quantity < 4 ? (
-                                        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm px-4 py-2 rounded-md flex items-center gap-2 animate-pulse">
-                                            <span className="text-xl">🔥</span>
-                                            <span className="font-bold">โปรโมชั่น:</span>
-                                            ซื้อเพิ่มอีก <span className="font-black text-red-600">{4 - item.quantity} เส้น</span> เพื่อรับราคาพิเศษ <span className="font-black">4 เส้น 7,000 บาท!</span>
-                                        </div>
-                                    ) : (
-                                        <div className="bg-green-50 border border-green-200 text-green-800 text-sm px-4 py-2 rounded-md flex items-center gap-2">
-                                            <span className="text-xl">✅</span>
-                                            <span className="font-bold">ใช้โปรโมชั่นแล้ว:</span>
-                                            ราคาพิเศษสำหรับชุด 4 เส้น (7,000 บาท) Active!
-                                        </div>
-                                    )}
+                                    {(() => {
+                                        // Detect Bundle Price logic reuse
+                                        const minQty = item.promo_min_quantity || 1
+
+                                        // Robust check: 
+                                        // If stored promotional_price (DB) is greater than the current effective unit price (item.price),
+                                        // it MUST be a bundle total (e.g. 14000 > 3500).
+                                        // If it's a per-unit promo (e.g. 2000), it will be equal to item.price (2000), or less if item.price reverted to regular.
+
+                                        const isBundleTotal = item.promotional_price > item.price && minQty > 1;
+
+                                        const displayPrice = isBundleTotal
+                                            ? `${item.promotional_price.toLocaleString()} บาท (ชุด ${minQty} เส้น)`
+                                            : `${item.promotional_price.toLocaleString()} บาท/เส้น`
+
+                                        return item.quantity < minQty ? (
+                                            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm px-4 py-2 rounded-md flex items-center gap-2 animate-pulse">
+                                                <span className="text-xl">🔥</span>
+                                                <span className="font-bold">โปรโมชั่น:</span>
+                                                ซื้อเพิ่มอีก <span className="font-black text-red-600">{minQty - item.quantity} เส้น</span> เพื่อรับราคาพิเศษ <span className="font-black">{displayPrice}</span>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-green-50 border border-green-200 text-green-800 text-sm px-4 py-2 rounded-md flex items-center gap-2">
+                                                <span className="text-xl">✅</span>
+                                                <span className="font-bold">ใช้โปรโมชั่นแล้ว:</span>
+                                                ราคาพิเศษ <span className="font-black">{displayPrice}</span> (ครบเงื่อนไข {minQty} เส้น)
+                                            </div>
+                                        )
+                                    })()}
                                 </div>
                             )}
                         </div>
@@ -145,10 +167,7 @@ export default function CartPage() {
                                 <span>ยอดรวมย่อย</span>
                                 <span>{subtotal.toLocaleString()} ฿</span>
                             </div>
-                            <div className="flex justify-between text-gray-300">
-                                <span>ค่าจัดส่ง</span>
-                                <span className="text-blue-500 font-bold">ฟรี</span>
-                            </div>
+
                             <div className="flex justify-between text-sm text-gray-400 italic">
                                 <span>รายละเอียดสินค้า</span>
                                 <span>{breakdown.formattedString}</span>

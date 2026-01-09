@@ -22,17 +22,8 @@ export function CartSyncProvider({ children }: { children: React.ReactNode }) {
             const isLoggedIn = !!session?.user
             setLoggedIn(isLoggedIn)
 
-            if (isLoggedIn) {
-                // User is logged in - check if we have guest cart to sync
-                const localCart = useCartStore.getState().items
-                if (localCart.length > 0) {
-                    // Sync guest cart to database
-                    syncGuestCart()
-                } else {
-                    // Just load from database
-                    loadFromDatabase()
-                }
-            }
+            // Note: We don't auto-load database here anymore
+            // Components will load data as needed to avoid race conditions
         })
 
         // Listen for auth state changes
@@ -47,9 +38,9 @@ export function CartSyncProvider({ children }: { children: React.ReactNode }) {
                 const localCart = useCartStore.getState().items
                 if (localCart.length > 0) {
                     await syncGuestCart()
-                } else {
-                    await loadFromDatabase()
                 }
+                // Note: We don't loadFromDatabase here anymore
+                // Cart page or components will load data as needed
             } else if (event === 'SIGNED_OUT') {
                 // User logged out - cart store will automatically use localStorage
                 // No need to do anything

@@ -17,6 +17,8 @@ export interface CartItem {
     imageUrl: string
     brand: string
     specs: string // e.g. "195/65 R15"
+    promotional_price?: number
+    promo_min_quantity?: number
 }
 
 interface CartState {
@@ -85,14 +87,37 @@ export const useCartStore = create<CartState>()(
                         .filter(item => item.tyres_products) // Filter out items with deleted products
                         .map(item => {
                             const product = item.tyres_products!
+                            const minQty = product.promo_min_quantity || 1
+
+                            // Use promotional price ONLY if:
+                            // 1. It exists and is > 0
+                            // 2. Quantity meets minimum requirement
+                            // 3. It provides a valid discount (handling Bundle Pricing)
+
+                            let promoUnitPrice = product.promotional_price
+                            if (product.promotional_price && minQty > 1 && product.promotional_price > product.price) {
+                                // Assume Bundle Price (e.g. 14000 for 4 items)
+                                promoUnitPrice = product.promotional_price / minQty
+                            }
+
+                            const hasValidPromo = promoUnitPrice &&
+                                promoUnitPrice > 0 &&
+                                promoUnitPrice < product.price
+
+                            const effectivePrice = (hasValidPromo && item.quantity >= minQty)
+                                ? Number(promoUnitPrice)
+                                : Number(product.price)
+
                             return {
                                 id: item.product_id,
                                 model: product.model,
-                                price: Number(product.price),
+                                price: effectivePrice,
                                 quantity: item.quantity,
                                 imageUrl: product.image_url || '',
                                 brand: product.brand,
-                                specs: `${product.width}/${product.aspect_ratio} ${product.construction}${product.rim}`
+                                specs: `${product.width}/${product.aspect_ratio} ${product.construction}${product.rim}`,
+                                promotional_price: product.promotional_price ? Number(product.promotional_price) : undefined,
+                                promo_min_quantity: minQty
                             }
                         })
 

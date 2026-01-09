@@ -33,7 +33,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
         query = query.limit(1)
     }
 
-    const { data: fetchedOrders, error: fetchError } = await query
+    const { data: fetchedOrders, error: _fetchError } = await query
 
     // Lazy Expiration Logic
     const orders = fetchedOrders ? await Promise.all(fetchedOrders.map(async (order) => {

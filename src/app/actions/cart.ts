@@ -14,6 +14,8 @@ export interface CartItemDB {
     tyres_products?: {
         model: string
         price: number
+        promotional_price?: number
+        promo_min_quantity?: number
         image_url: string
         brand: string
         width: number
@@ -41,6 +43,8 @@ export async function getCartItems(): Promise<CartItemDB[]> {
       tyres_products (
         model,
         price,
+        promotional_price,
+        promo_min_quantity,
         image_url,
         brand,
         width,

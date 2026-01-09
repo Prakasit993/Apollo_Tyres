@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ShoppingCart, User } from "lucide-react"
+import { User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase-server"
 import { signout } from "@/app/login/actions"

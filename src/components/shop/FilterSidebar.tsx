@@ -18,7 +18,7 @@ const CAR_MODELS = [
 ]
 
 export function FilterSidebar() {
-    const [state, formAction, isPending] = useActionState(filterProducts, null);
+    const [_state, formAction, isPending] = useActionState(filterProducts, null);
     const searchParams = useSearchParams()
     const router = useRouter()
 

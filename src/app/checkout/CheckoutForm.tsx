@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 import { Modal } from "@/components/ui/custom-modal"
-import { Copy, QrCode, Building2, Upload } from "lucide-react"
+import { Copy, QrCode, Building2, Upload, CheckCircle } from "lucide-react"
 
 interface CheckoutFormProps {
     user: any
@@ -37,6 +37,8 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
     const [paymentMethod, setPaymentMethod] = useState("transfer_bank")
     const [showBankModal, setShowBankModal] = useState(false)
     const [showQrModal, setShowQrModal] = useState(false)
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
+    const [successOrderId, setSuccessOrderId] = useState<string | null>(null)
     const [slipFileName, setSlipFileName] = useState<string | null>(null)
 
     // Local state for form values
@@ -129,7 +131,9 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                 setError(result.message)
             } else if (result?.success) {
                 clearCart()
-                router.push('/orders?success=true')
+                setSuccessOrderId(result.orderId!)
+                setShowSuccessModal(true)
+                // router.push(`/account/orders/${result.orderId}?success=true`)
             }
         } catch (e) {
             setError("Something went wrong. Please try again.")
@@ -211,6 +215,26 @@ export function CheckoutForm({ user, profile, defaultAddress, remarks, bankDetai
                     <Button onClick={() => setShowQrModal(false)} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                         ปิด (Close)
                     </Button>
+                </div>
+            </Modal>
+
+            <Modal isOpen={showSuccessModal} onClose={() => { }} title="ยืนยันการสั่งซื้อเรียบร้อย">
+                <div className="flex flex-col items-center justify-center py-6 space-y-4 text-center">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-2">
+                        <CheckCircle className="w-10 h-10" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900">ขอบคุณสำหรับการสั่งซื้อ!</h3>
+                    <p className="text-gray-500 max-w-xs">
+                        เราได้รับคำสั่งซื้อของคุณแล้วและกำลังดำเนินการตรวจสอบ
+                    </p>
+                    <div className="pt-4 w-full">
+                        <Button
+                            onClick={() => router.push(`/account/orders/${successOrderId}?success=true`)}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                        >
+                            ดูรายการสั่งซื้อ
+                        </Button>
+                    </div>
                 </div>
             </Modal>
 

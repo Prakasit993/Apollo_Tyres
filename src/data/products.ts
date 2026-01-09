@@ -7,6 +7,8 @@ export interface Product {
     construction: 'R' | 'D' | 'B'
     rim: number
     price: number
+    promotional_price?: number
+    promo_min_quantity?: number
     stock: number
     image_url: string
     featured?: boolean

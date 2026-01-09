@@ -5,12 +5,22 @@ import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/lib/cart-store"
 import { Check, ShoppingCart } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { createClient } from "@/lib/supabase"
 
 export function AddToCartButton({ product }: { product: any }) {
     const addToCart = useCartStore((state) => state.addToCart)
     const [isAdded, setIsAdded] = useState(false)
 
     const handleAddToCart = async () => {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+
+        if (!user) {
+            alert('กรุณาล็อกอินก่อนเพิ่มสินค้าลงตะกร้า')
+            window.location.href = '/login'
+            return
+        }
+
         await addToCart({
             id: product.id,
             model: product.model,

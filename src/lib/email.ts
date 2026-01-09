@@ -1,21 +1,21 @@
 import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-    },
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
 })
 
 export async function sendOrderConfirmationEmail(
-    to: string,
-    orderId: string,
-    items: any[],
-    total: number,
-    customerName: string
+  to: string,
+  orderId: string,
+  items: { brand: string; model: string; quantity: number; price: number }[],
+  total: number,
+  customerName: string
 ) {
-    const itemsHtml = items.map(item => `
+  const itemsHtml = items.map(item => `
     <tr>
         <td style="padding: 10px; border-bottom: 1px solid #ddd;">${item.brand} ${item.model}</td>
         <td style="padding: 10px; border-bottom: 1px solid #ddd;">${item.quantity}</td>
@@ -23,11 +23,11 @@ export async function sendOrderConfirmationEmail(
     </tr>
   `).join('')
 
-    const mailOptions = {
-        from: `"Tire Select" <${process.env.GMAIL_USER}>`,
-        to: to,
-        subject: `Order Confirmation #${orderId.slice(0, 8)}`,
-        html: `
+  const mailOptions = {
+    from: `"Tire Select" <${process.env.GMAIL_USER}>`,
+    to: to,
+    subject: `Order Confirmation #${orderId.slice(0, 8)}`,
+    html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #d4af37;">Thank You for Your Order!</h1>
         <p>Hi ${customerName},</p>
@@ -61,14 +61,14 @@ export async function sendOrderConfirmationEmail(
         </p>
       </div>
     `,
-    }
+  }
 
-    try {
-        await transporter.sendMail(mailOptions)
-        console.log('Order confirmation email sent to', to)
-        return { success: true }
-    } catch (error) {
-        console.error('Error sending email:', error)
-        return { success: false, error }
-    }
+  try {
+    await transporter.sendMail(mailOptions)
+    console.log('Order confirmation email sent to', to)
+    return { success: true }
+  } catch (error) {
+    console.error('Error sending email:', error)
+    return { success: false, error }
+  }
 }

@@ -153,8 +153,34 @@ export function ProductForm({ product }: ProductFormProps) {
                     <Input id="price" name="price" type="number" step="0.01" defaultValue={product?.price} required placeholder="เช่น 2500" className="bg-white text-gray-900 border-gray-300" />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="stock" className="text-charcoal-900">จำนวนสินค้าในสต็อก</Label>
+                    <Label htmlFor="promotionalPrice" className="text-charcoal-900">ราคาโปรโมชั่น (บาท) - ไม่บังคับ</Label>
+                    <Input id="promotionalPrice" name="promotionalPrice" type="number" step="0.01" defaultValue={product?.promotional_price} placeholder="เช่น 2000" className="bg-white text-gray-900 border-gray-300" />
+                    <p className="text-xs text-gray-500">เว้นว่างไว้ถ้าไม่มีโปรโมชั่น หรือกรอก 0 เพื่อลบโปรโมชั่น</p>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="promoMinQuantity" className="text-charcoal-900">จำนวนขั้นต่ำสำหรับโปร (เส้น)</Label>
+                    <Input id="promoMinQuantity" name="promoMinQuantity" type="number" min="1" defaultValue={product?.promo_min_quantity || 1} className="bg-white text-gray-900 border-gray-300" />
+                    <p className="text-xs text-gray-500">ลูกค้าต้องซื้อครบจำนวนนี้ถึงจะได้ราคาโปร (ค่าเริ่มต้น 1 = ไม่มีขั้นต่ำ)</p>
+                </div>
+                <div className="space-y-2">
                     <Input id="stock" name="stock" type="number" defaultValue={product?.stock || 0} required className="bg-white text-gray-900 border-gray-300" />
+                </div>
+
+                {/* Featured Checkbox */}
+                <div className="space-y-2 flex items-center gap-3 pt-6">
+                    <div className="flex items-center h-5">
+                        <input
+                            id="featured"
+                            name="featured"
+                            type="checkbox"
+                            defaultChecked={product?.featured}
+                            className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div className="text-sm">
+                        <Label htmlFor="featured" className="font-medium text-charcoal-900">สินค้าแนะนำ (Featured)</Label>
+                        <p className="text-gray-500 text-xs">แสดงในส่วน "สินค้าแนะนำ" หน้าแรก (ถ้ามีราคาโปรโมชั่น ระบบจะติ๊กให้อัตโนมัติ)</p>
+                    </div>
                 </div>
 
                 {/* Description */}
