@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { CartItem } from '@/lib/cart-store'
 
 const OrderSchema = z.object({
     fullName: z.string().min(1, "Name is required"),
@@ -68,7 +69,7 @@ export async function updateProfileAddress(formData: FormData) {
 export async function placeOrder(
     prevState: CheckoutState,
     formData: FormData,
-    cartItems: any[], // Passed from client store
+    cartItems: CartItem[],
     cartTotal: number
 ): Promise<CheckoutState> {
     const supabase = await createClient()

@@ -17,7 +17,7 @@ export async function updateSession(request: NextRequest) {
                     return request.cookies.getAll()
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+                    cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
                     response = NextResponse.next({
                         request: {
                             headers: request.headers,
@@ -42,6 +42,11 @@ export async function updateSession(request: NextRequest) {
     }
 
     if (request.nextUrl.pathname.startsWith('/checkout') && !user) {
+        return NextResponse.redirect(new URL('/login', request.url))
+    }
+
+    // Admin routes require authentication (role check done in layout)
+    if (request.nextUrl.pathname.startsWith('/admin') && !user) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
 

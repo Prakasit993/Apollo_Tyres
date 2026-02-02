@@ -14,7 +14,7 @@ const searchSchema = z.object({
   maxPrice: z.string().optional(),
 });
 
-export async function filterProducts(prevState: any, formData: FormData) {
+export async function filterProducts(prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData.entries());
 
   // Construct query params
